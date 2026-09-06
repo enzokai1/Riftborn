@@ -8,6 +8,7 @@ public class PlayerProgressionUI : MonoBehaviour
     [SerializeField] private PlayerExperience playerExperience;
     [SerializeField] private TMP_Text levelText;
     [SerializeField] private Slider experienceBar;
+    [SerializeField] private TMP_Text experienceText;
 
     private void OnEnable()
     {
@@ -39,5 +40,9 @@ public class PlayerProgressionUI : MonoBehaviour
             : 0f;
 
         experienceBar.SetValueWithoutNotify(Mathf.Clamp01(progress));
+        if (experienceText != null)
+        {
+            experienceText.text = $"{playerExperience.CurrentExperience} / {playerExperience.NextLevelExperience} XP";
+        }
     }
 }

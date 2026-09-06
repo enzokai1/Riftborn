@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 1159068438491745570}
   - component: {fileID: 8479541463807527806}
   - component: {fileID: 6263999021718255054}
+  - component: {fileID: 2756320537213178296}
+  - component: {fileID: 6294305735493089639}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -209,3 +211,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDeath
   experiencePickupPrefab: {fileID: 5711344465707192043, guid: 3574a3c07a9f5f64788c7cc91614e622, type: 3}
+--- !u!114 &2756320537213178296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3579895706887234204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57087e75d80470a4c8d288a6cd9be539, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyContactDamage
+  damage: 10
+  damageInterval: 1
+--- !u!114 &6294305735493089639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3579895706887234204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd3e572e2616a5d40a414990663f53f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyKillReporter
+  matchStats: {fileID: 0}

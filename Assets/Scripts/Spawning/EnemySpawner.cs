@@ -4,6 +4,7 @@ public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private Transform player;
+    [SerializeField] private MatchStats matchStats;
     [SerializeField, Min(0.01f)] private float minimumSpawnDistance = 5f;
     [SerializeField, Min(0.01f)] private float maximumSpawnDistance = 8f;
     [SerializeField, Min(0.01f)] private float spawnInterval = 2f;
@@ -27,6 +28,18 @@ public class EnemySpawner : MonoBehaviour
         if (!enemyPrefab.TryGetComponent<EnemyController>(out _))
         {
             Debug.LogError("EnemySpawner requires EnemyController on the Enemy Prefab's root GameObject.", this);
+            enabled = false;
+        }
+
+        if (matchStats == null)
+        {
+            Debug.LogError("EnemySpawner requires a MatchStats scene reference.", this);
+            enabled = false;
+        }
+
+        if (!enemyPrefab.TryGetComponent<EnemyKillReporter>(out _))
+        {
+            Debug.LogError("EnemySpawner requires EnemyKillReporter on the Enemy Prefab's root GameObject.", this);
             enabled = false;
         }
     }
@@ -60,5 +73,7 @@ public class EnemySpawner : MonoBehaviour
         GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
         EnemyController enemyController = enemy.GetComponent<EnemyController>();
         enemyController.SetTarget(player);
+        EnemyKillReporter killReporter = enemy.GetComponent<EnemyKillReporter>();
+        killReporter.SetMatchStats(matchStats);
     }
 }
