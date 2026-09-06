@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -9,6 +10,8 @@ public class PlayerExperience : MonoBehaviour
     public int CurrentLevel { get; private set; } = 1;
     public long CurrentExperience { get; private set; } = 0;
     public int NextLevelExperience { get; private set; }
+
+    public event Action ExperienceChanged;
 
     private void Awake()
     {
@@ -41,6 +44,7 @@ public class PlayerExperience : MonoBehaviour
         }
 
         Debug.Log($"Player coletou {amount} XP | XP atual: {CurrentExperience}/{NextLevelExperience} | Nível: {CurrentLevel}", this);
+        ExperienceChanged?.Invoke();
     }
 
     private int CalculateNextLevelExperience()
