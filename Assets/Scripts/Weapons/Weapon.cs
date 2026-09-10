@@ -1,68 +1,140 @@
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 [DisallowMultipleComponent]
 public class Weapon : MonoBehaviour
 {
-    [SerializeField] private Camera aimCamera;
+    [SerializeField, Min(0.01f)] private float detectionRange = 6f;
+    [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private Projectile projectilePrefab;
     [SerializeField] private Transform firePoint;
     [SerializeField, Min(1)] private int damage = 1;
     [Tooltip("Projectile speed in Unity units per second.")]
     [SerializeField, Min(0.01f)] private float projectileSpeed = 10f;
-    [Tooltip("Number of shots per second while the left mouse button is held.")]
+    [Tooltip("Maximum number of automatic shots per second.")]
     [SerializeField, Min(0.01f)] private float shotsPerSecond = 4f;
 
+    private const float TargetSearchInterval = 0.1f;
+
+    private readonly List<Collider2D> nearbyEnemies = new List<Collider2D>(32);
+    private ContactFilter2D enemyFilter;
+    private EnemyHealth currentTarget;
     private float nextShotTime;
+    private float nextTargetSearchTime;
 
     private void Awake()
     {
+        detectionRange = Mathf.Max(0.01f, detectionRange);
         damage = Mathf.Max(1, damage);
         projectileSpeed = Mathf.Max(0.01f, projectileSpeed);
         shotsPerSecond = Mathf.Max(0.01f, shotsPerSecond);
 
-        if (aimCamera == null || projectilePrefab == null || firePoint == null)
+        if (projectilePrefab == null || firePoint == null)
         {
-            Debug.LogError("Weapon requires an Aim Camera, Projectile Prefab and Fire Point.", this);
+            Debug.LogError("Weapon requires a Projectile Prefab and Fire Point.", this);
             enabled = false;
         }
     }
 
     private void Update()
     {
-        Mouse mouse = Mouse.current;
-        if (mouse == null || Time.timeScale == 0f)
+        if (Time.timeScale == 0f)
         {
             return;
         }
 
-        // Intersect the cursor ray with the weapon's XY plane to obtain a world position.
-        Ray cursorRay = aimCamera.ScreenPointToRay(mouse.position.ReadValue());
-        Plane aimPlane = new Plane(Vector3.forward, transform.position);
-        if (!aimPlane.Raycast(cursorRay, out float distance))
+        if (!IsValidTarget(currentTarget))
+        {
+            currentTarget = null;
+        }
+
+        bool canAttemptShot = Time.time >= nextShotTime
+            && Time.time >= nextTargetSearchTime;
+
+        if (canAttemptShot)
+        {
+            currentTarget = FindNearestEnemy();
+            if (currentTarget == null)
+            {
+                nextTargetSearchTime = Time.time + TargetSearchInterval;
+            }
+        }
+
+        if (currentTarget == null)
         {
             return;
         }
 
-        Vector2 aimDirection = cursorRay.GetPoint(distance) - transform.position;
-        if (aimDirection.sqrMagnitude == 0f)
+        Vector2 aimDirection = currentTarget.transform.position - transform.position;
+        if (aimDirection.sqrMagnitude > 0f)
         {
-            return;
+            float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, 0f, angle);
         }
 
-        float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0f, 0f, angle);
-
-        if (mouse.leftButton.isPressed && Time.time >= nextShotTime)
+        if (canAttemptShot)
         {
-            Shoot();
-            nextShotTime = Time.time + 1f / shotsPerSecond;
+            if (Shoot())
+            {
+                nextShotTime = Time.time + 1f / shotsPerSecond;
+            }
+            else
+            {
+                // A target exactly at the muzzle has no valid shot direction.
+                nextTargetSearchTime = Time.time + TargetSearchInterval;
+            }
         }
     }
 
-    private void Shoot()
+    private bool IsValidTarget(EnemyHealth enemy)
     {
+        return enemy != null && enemy.gameObject.activeInHierarchy && !enemy.IsDead
+            && (enemyLayer.value & (1 << enemy.gameObject.layer)) != 0
+            && ((Vector2)(enemy.transform.position - transform.position)).sqrMagnitude
+                <= detectionRange * detectionRange;
+    }
+
+    private EnemyHealth FindNearestEnemy()
+    {
+        enemyFilter.SetLayerMask(enemyLayer);
+        enemyFilter.useTriggers = true;
+        nearbyEnemies.Clear();
+        Physics2D.OverlapCircle(transform.position, detectionRange, enemyFilter, nearbyEnemies);
+
+        EnemyHealth nearestEnemy = null;
+        float nearestDistanceSquared = float.PositiveInfinity;
+
+        for (int i = 0; i < nearbyEnemies.Count; i++)
+        {
+            Collider2D candidate = nearbyEnemies[i];
+            if (candidate == null || !candidate.TryGetComponent(out EnemyHealth enemy)
+                || !IsValidTarget(enemy))
+            {
+                continue;
+            }
+
+            float distanceSquared = ((Vector2)(enemy.transform.position - transform.position)).sqrMagnitude;
+            if (distanceSquared < nearestDistanceSquared)
+            {
+                nearestDistanceSquared = distanceSquared;
+                nearestEnemy = enemy;
+            }
+        }
+
+        return nearestEnemy;
+    }
+
+    private bool Shoot()
+    {
+        Vector2 direction = currentTarget.transform.position - firePoint.position;
+        if (direction.sqrMagnitude == 0f)
+        {
+            return false;
+        }
+
+        direction.Normalize();
         Projectile projectile = Instantiate(projectilePrefab, firePoint.position, transform.rotation);
-        projectile.Initialize(transform.right, projectileSpeed, damage);
+        projectile.Initialize(direction, projectileSpeed, damage);
+        return true;
     }
 }
