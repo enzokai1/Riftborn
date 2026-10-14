@@ -1,4 +1,4 @@
-﻿using TMPro;
+using TMPro;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -25,7 +25,7 @@ public class KillCountUI : MonoBehaviour
             : matchStats.Victory ? "QUARTO CONCLUÍDO"
             : matchStats.BossDefeated ? "GUNTER DERROTADO"
             : matchStats.BossSpawned ? "DERROTE GUNTER"
-            : $"Fantasmas: {matchStats.GhostKills}\nExplore o quarto";
+            : $"Fantasmas: {matchStats.GhostKills}/{MatchStats.GhostTarget}\nRestam: {matchStats.GhostsRemaining}";
     }
 }
 

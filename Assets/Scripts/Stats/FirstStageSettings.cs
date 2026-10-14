@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 // Values left as variables in the GDD are exposed on MatchStats in the Inspector.
@@ -26,7 +26,7 @@ public class FirstStageSettings
     [Min(5f)] public float ringCooldown = 30f;
 
     public static int WaveAt(float seconds) => Mathf.Clamp(Mathf.FloorToInt(seconds / 300f), 0, 3);
-    public static float SpawnInterval(int wave) => wave == 0 ? 5f : wave == 1 ? 2.5f : 1f;
+    public static float SpawnInterval(int wave) => wave == 0 ? 1f : wave == 1 ? 0.75f : 0.5f;
     public static int SpawnCount(int wave) => wave >= 3 ? 2 : 1;
     public static float GhostMultiplier(int wave) => 1f + Mathf.Clamp(wave, 0, 3) * 0.5f;
 }

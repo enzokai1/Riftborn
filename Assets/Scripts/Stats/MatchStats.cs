@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -8,6 +8,17 @@ public class MatchStats : MonoBehaviour
 {
     [SerializeField] private FirstStageSettings settings = new FirstStageSettings();
     public FirstStageSettings Rules => settings;
+    public const int GhostTarget = 50;
+    public int GhostsRemaining => Mathf.Max(0, GhostTarget - GhostKills);
+    public bool BossReady => GhostsRemaining == 0 || (Objective != null && Objective.Assembled);
+    private int ghostsSpawned;
+
+    public bool TryReserveGhost()
+    {
+        if (!CombatActive || BossSpawned || ghostsSpawned >= GhostTarget) return false;
+        ghostsSpawned++;
+        return true;
+    }
     public int KillCount { get; private set; }
     public int GhostKills { get; private set; }
     public bool BossSpawned { get; private set; }
@@ -68,7 +79,7 @@ public class MatchStats : MonoBehaviour
 
     public bool TryReserveBoss()
     {
-        if (!CombatActive || Objective == null || !Objective.Assembled || BossSpawned) return false;
+        if (!CombatActive || !BossReady || BossSpawned) return false;
         BossSpawned = true;
         NotifyChanged();
         return true;

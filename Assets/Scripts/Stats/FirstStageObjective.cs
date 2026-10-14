@@ -7,6 +7,7 @@ public class FirstStageObjective : MonoBehaviour
 {
     private MatchStats match;
     private BoxCollider2D bedCollider;
+    public Collider2D BedObstacle => bedCollider;
     private StageVisuals visuals;
     private readonly List<StagePickup> fragments = new List<StagePickup>();
     private readonly List<Vector2> fragmentPositions = new List<Vector2>();
@@ -198,7 +199,7 @@ public class FirstStageObjective : MonoBehaviour
         if (match == null || match.Finished || match.IsPaused || Keyboard.current == null) return;
         if (!Keyboard.current.eKey.wasPressedThisFrame) return;
         if (!Assembled) TryAssemble();
-        else if (match.BossDefeated && Vector2.Distance(match.Player.transform.position, exit.position) < 2.5f)
+        if (match.BossDefeated && Vector2.Distance(match.Player.transform.position, exit.position) < 2.5f)
             match.CompleteStage();
     }
 

@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,7 +6,7 @@ using UnityEngine.InputSystem;
 public class FirstStageHUD : MonoBehaviour
 {
     private MatchStats match;
-    private TMP_Text timer;
+
     private GUIStyle title;
     private GUIStyle body;
     private GUIStyle button;
@@ -17,18 +16,16 @@ public class FirstStageHUD : MonoBehaviour
     private void Start()
     {
         match = GetComponent<MatchStats>();
-        GameObject clock = GameObject.Find("TimerText");
-        if (clock != null) timer = clock.GetComponent<TMP_Text>();
+        // Keep all gameplay information in the same HUD as objectives and menus.
+        // This also works in scenes with missing or stale Canvas bindings.
+        GameObject legacyHUD = GameObject.Find("RiftbornHUD");
+        if (legacyHUD != null) legacyHUD.SetActive(false);
     }
 
     private void Update()
     {
         if (match == null) return;
-        if (timer != null)
-        {
-            int seconds = Mathf.FloorToInt(match.ElapsedSeconds);
-            timer.text = $"{seconds / 60:00}:{seconds % 60:00}";
-        }
+
         if (match.Finished || match.Experience == null || !match.Experience.HasUpgradeChoice || Keyboard.current == null) return;
         Keyboard keys = Keyboard.current;
         if (keys.digit1Key.wasPressedThisFrame) match.Experience.ChooseUpgrade(0);
@@ -58,7 +55,7 @@ public class FirstStageHUD : MonoBehaviour
 
     private void DrawCompass(Vector2 delta)
     {
-        Vector2 center = new Vector2(1216, 72);
+        Vector2 center = new Vector2(1216, 160);
         Color old = GUI.color;
         for (int i = 0; i < 48; i++)
         {
@@ -99,12 +96,62 @@ public class FirstStageHUD : MonoBehaviour
         GUI.matrix = matrix;
     }
 
+    private static void Bar(Rect rect, float progress, Color fill)
+    {
+        Color previous = GUI.color;
+        GUI.color = new Color(0.16f, 0.18f, 0.26f);
+        GUI.DrawTexture(rect, Texture2D.whiteTexture);
+        GUI.color = fill;
+        GUI.DrawTexture(new Rect(rect.x, rect.y, rect.width * Mathf.Clamp01(progress), rect.height),
+            Texture2D.whiteTexture);
+        GUI.color = previous;
+    }
+
+    private void DrawStatus()
+    {
+        PlayerHealth player = match.Player;
+        if (player != null)
+        {
+            Panel(new Rect(18, 620, 290, 82));
+            GUI.Label(new Rect(34, 630, 258, 30),
+                $"VIDA   {player.CurrentHealth} / {player.MaxHealth}", title);
+            Bar(new Rect(34, 674, 258, 12),
+                player.MaxHealth > 0 ? (float)player.CurrentHealth / player.MaxHealth : 0f,
+                new Color(0.84f, 0.42f, 0.53f));
+        }
+
+        PlayerExperience experience = match.Experience;
+        if (experience != null)
+        {
+            Panel(new Rect(410, 18, 460, 90));
+            Weapon weapon = experience.GetComponentInChildren<Weapon>();
+            int damage = weapon != null ? weapon.CurrentDamage : 10 + experience.DamageBonus;
+            GUI.Label(new Rect(428, 24, 424, 30),
+                $"Nível {experience.CurrentLevel}  |  Dano {damage}", title);
+            Bar(new Rect(428, 62, 424, 10),
+                experience.NextLevelExperience > 0
+                    ? (float)experience.CurrentExperience / experience.NextLevelExperience : 0f,
+                new Color(0.55f, 0.36f, 0.96f));
+            GUI.Label(new Rect(428, 77, 424, 25),
+                $"{experience.CurrentExperience} / {experience.NextLevelExperience} XP", body);
+        }
+
+        Panel(new Rect(942, 18, 320, 90));
+        int seconds = Mathf.FloorToInt(match.ElapsedSeconds);
+        GUI.Label(new Rect(958, 24, 288, 28), $"FASE 1   {seconds / 60:00}:{seconds % 60:00}", title);
+        string progress = match.BossDefeated ? "Gunter derrotado"
+            : match.BossSpawned ? "Resta: Gunter"
+            : $"Fantasmas: {match.GhostKills}/{MatchStats.GhostTarget}  |  Restam: {match.GhostsRemaining}";
+        GUI.Label(new Rect(958, 60, 288, 40), progress, body);
+    }
+
     private void OnGUI()
     {
         if (match == null || match.Objective == null) return;
         Styles();
         Matrix4x4 previous = GUI.matrix;
         GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(Screen.width / 1280f, Screen.height / 720f, 1));
+        DrawStatus();
         Panel(new Rect(18, 18, 325, 90));
         GUI.Label(new Rect(34, 30, 293, 68), match.Objective.Instruction, body);
         if ((!match.BossSpawned || match.BossDefeated) && !match.Finished)

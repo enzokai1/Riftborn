@@ -26,7 +26,7 @@ public class EnemySpawner : MonoBehaviour
     private void Update()
     {
         if (player == null || !matchStats.CombatActive || matchStats.IsPaused) return;
-        if (matchStats.Objective != null && matchStats.Objective.Assembled && !matchStats.BossSpawned)
+        if (matchStats.BossReady && !matchStats.BossSpawned)
         {
             SpawnEnemy(true, 0);
             return;
@@ -55,7 +55,7 @@ public class EnemySpawner : MonoBehaviour
             if (HouseFloor.Active == null || HouseFloor.Active.Contains(position, boss ? 2.5f : 1f))
             { found = true; break; }
         }
-        if (!found || (boss && !matchStats.TryReserveBoss())) return;
+        if (!found || (boss ? !matchStats.TryReserveBoss() : !matchStats.TryReserveGhost())) return;
         GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
         EnemyController controller = enemy.GetComponent<EnemyController>();
         controller.SetTarget(player);

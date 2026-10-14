@@ -106,7 +106,7 @@ public class PlayerSpriteAnimation : MonoBehaviour
         Vector2 direction = body != null ? body.linearVelocity : controller.MovementDirection;
         bool moving = controller.isActiveAndEnabled && controller.MovementDirection.sqrMagnitude > 0.001f
             && direction.sqrMagnitude > 0.0025f;
-        Facing nextFacing = moving ? DirectionToFacing(direction) : facing;
+        Facing nextFacing = moving ? DirectionToFacing(controller.MovementDirection) : facing;
         if (!moving || !wasMoving || nextFacing != facing) walkElapsed = 0f;
         else walkElapsed += Time.deltaTime;
         facing = nextFacing;
@@ -114,6 +114,8 @@ public class PlayerSpriteAnimation : MonoBehaviour
 
         if (shooting && (weapon == null || !weapon.isActiveAndEnabled || !weapon.HasEnemyInRange))
             shooting = false;
+        // Keep the walk cycle visible during automatic fire; standing casts keep their animation.
+        if (shooting && moving) shooting = false;
         if (shooting)
         {
             Sprite[] shots = Frames(shotFacing, true);
@@ -130,7 +132,7 @@ public class PlayerSpriteAnimation : MonoBehaviour
         }
 
         ShowFrame(Frames(facing, false),
-            moving ? Mathf.FloorToInt(walkElapsed * Mathf.Max(1f, framesPerSecond)) : 0, facing == Facing.Left);
+            moving ? Mathf.FloorToInt(walkElapsed * Mathf.Max(1f, framesPerSecond)) : 0);
     }
 
     private static Facing DirectionToFacing(Vector2 direction)
@@ -145,7 +147,7 @@ public class PlayerSpriteAnimation : MonoBehaviour
         switch (direction)
         {
             case Facing.Up: return attack ? shootUp : walkUp;
-            case Facing.Left: return attack ? shootRight : walkRight;
+            case Facing.Left: return attack ? shootRight : walkLeft;
             case Facing.Right: return attack ? shootRight : walkRight;
             default: return attack ? shootDown : walkDown;
         }
