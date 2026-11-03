@@ -88,7 +88,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  m_Sprite: {fileID: 4610576671343732192, guid: c452cc0d450d8d947a40014fdb7d9369, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -138,7 +138,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   target: {fileID: 0}
-  movementSpeed: 3
+  movementSpeed: 1.8
+  animationFramesPerSecond: 10
+  attackFrames:
+  - {fileID: -4885465403820583246, guid: 10efc58b88ac7f94589944a6acf432ef, type: 3}
+  - {fileID: 714159002586540784, guid: 10efc58b88ac7f94589944a6acf432ef, type: 3}
+  - {fileID: 4870265971847230695, guid: 10efc58b88ac7f94589944a6acf432ef, type: 3}
+  - {fileID: 1998906437285517073, guid: 10efc58b88ac7f94589944a6acf432ef, type: 3}
+  - {fileID: -301280052444656893, guid: 10efc58b88ac7f94589944a6acf432ef, type: 3}
+  - {fileID: 2613070745431093251, guid: 10efc58b88ac7f94589944a6acf432ef, type: 3}
+  - {fileID: 3161286735664444143, guid: 10efc58b88ac7f94589944a6acf432ef, type: 3}
+  idleFrames:
+  - {fileID: 4610576671343732192, guid: c452cc0d450d8d947a40014fdb7d9369, type: 3}
+  - {fileID: 7933169506272541288, guid: c452cc0d450d8d947a40014fdb7d9369, type: 3}
+  - {fileID: -4751834672829971033, guid: c452cc0d450d8d947a40014fdb7d9369, type: 3}
+  - {fileID: 5165554279181358532, guid: c452cc0d450d8d947a40014fdb7d9369, type: 3}
+  - {fileID: 4962841209916830064, guid: c452cc0d450d8d947a40014fdb7d9369, type: 3}
+  - {fileID: -7143203775114824597, guid: c452cc0d450d8d947a40014fdb7d9369, type: 3}
+  walkFrames:
+  - {fileID: 1564836920576004226, guid: f2279f7c42926a44ba74cb1ed255087d, type: 3}
+  - {fileID: 8663930358724894708, guid: f2279f7c42926a44ba74cb1ed255087d, type: 3}
+  - {fileID: 4476905305216522435, guid: f2279f7c42926a44ba74cb1ed255087d, type: 3}
+  - {fileID: -6252743113012979243, guid: f2279f7c42926a44ba74cb1ed255087d, type: 3}
+  - {fileID: -4330850591289345602, guid: f2279f7c42926a44ba74cb1ed255087d, type: 3}
+  - {fileID: -7873456424031651436, guid: f2279f7c42926a44ba74cb1ed255087d, type: 3}
+  - {fileID: -8357550592321713677, guid: f2279f7c42926a44ba74cb1ed255087d, type: 3}
+  - {fileID: -7433738477138490237, guid: f2279f7c42926a44ba74cb1ed255087d, type: 3}
 --- !u!114 &1159068438491745570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,7 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 911a0626a8775eb4cb4b6a5079d68d5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maximumHealth: 10
+  maximumHealth: 20
 --- !u!61 &8479541463807527806
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -223,8 +248,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57087e75d80470a4c8d288a6cd9be539, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyContactDamage
-  damage: 10
+  damage: 5
   damageInterval: 1
+  attackDuration: 0.7
+  bladeReach: 0.35
 --- !u!114 &6294305735493089639
 MonoBehaviour:
   m_ObjectHideFlags: 0

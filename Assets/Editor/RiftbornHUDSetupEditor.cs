@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using TMPro;
 using UnityEditor;
@@ -81,12 +81,12 @@ public static class RiftbornHUDSetupEditor
                 new Color32(214, 107, 135, 255), 0.75f);
 
             RectTransform info = Node(hud, "MatchInfo");
-            Place(info, new Vector2(1, 1), new Vector2(-32, -28), new Vector2(240, 96));
+            Place(info, new Vector2(1, 1), new Vector2(-32, -28), new Vector2(280, 120));
             Surface(info);
             Label(info, "TimerText", "00:00", 28, Text,
                 TextAlignmentOptions.Right, new Vector2(0, -10), new Vector2(200, 36));
-            Label(info, "KillCountText", "— DERROTADOS", 18, Muted,
-                TextAlignmentOptions.Right, new Vector2(0, -54), new Vector2(200, 26));
+            Label(info, "KillCountText", "Fantasmas: 0\nExplore o quarto", 18, Muted,
+                TextAlignmentOptions.Right, new Vector2(0, -54), new Vector2(240, 50));
 
             PlayerProgressionUI[] presenters = hud.GetComponentsInChildren<PlayerProgressionUI>(true);
             if (presenters.Length > 1)
@@ -242,3 +242,4 @@ public static class RiftbornHUDSetupEditor
         return slider;
     }
 }
+

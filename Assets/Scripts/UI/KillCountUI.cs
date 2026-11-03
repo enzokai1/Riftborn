@@ -9,26 +9,23 @@ public class KillCountUI : MonoBehaviour
 
     private void OnEnable()
     {
-        if (matchStats == null || killCountText == null)
-        {
-            Debug.LogError("KillCountUI requires Match Stats and Kill Count Text.", this);
-            enabled = false;
-            return;
-        }
-
+        if (matchStats == null || killCountText == null) { enabled = false; return; }
         matchStats.KillsChanged += RefreshUI;
         RefreshUI();
     }
 
     private void OnDisable()
     {
-        if (matchStats != null)
-            matchStats.KillsChanged -= RefreshUI;
+        if (matchStats != null) matchStats.KillsChanged -= RefreshUI;
     }
 
     private void RefreshUI()
     {
-        string label = matchStats.KillCount == 1 ? "DERROTADO" : "DERROTADOS";
-        killCountText.text = $"{matchStats.KillCount} {label}";
+        killCountText.text = matchStats.DeathMessageVisible ? "VOCÊ MORREU"
+            : matchStats.Victory ? "QUARTO CONCLUÍDO"
+            : matchStats.BossDefeated ? "GUNTER DERROTADO"
+            : matchStats.BossSpawned ? "DERROTE GUNTER"
+            : $"Derrotados: {matchStats.GhostKills}\n{matchStats.FragmentProgress}";
     }
 }
+

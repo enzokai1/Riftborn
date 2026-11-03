@@ -1,4 +1,4 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +23,8 @@ public class PlayerProgressionUI : MonoBehaviour
         RefreshUI();
     }
 
+    private void Start() => RefreshUI();
+
     private void OnDisable()
     {
         if (playerExperience != null)
@@ -33,7 +35,9 @@ public class PlayerProgressionUI : MonoBehaviour
 
     private void RefreshUI()
     {
-        levelText.text = $"Nível {playerExperience.CurrentLevel}";
+        Weapon weapon = playerExperience.GetComponentInChildren<Weapon>();
+        int damage = weapon != null ? weapon.CurrentDamage : 10 + playerExperience.DamageBonus;
+        levelText.text = $"Nível {playerExperience.CurrentLevel} | Dano {damage}";
 
         float progress = playerExperience.NextLevelExperience > 0
             ? (float)playerExperience.CurrentExperience / playerExperience.NextLevelExperience
@@ -46,3 +50,4 @@ public class PlayerProgressionUI : MonoBehaviour
         }
     }
 }
+
