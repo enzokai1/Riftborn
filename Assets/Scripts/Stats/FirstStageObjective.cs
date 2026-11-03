@@ -9,6 +9,9 @@ public class FirstStageObjective : MonoBehaviour
     private BoxCollider2D bedCollider;
     public Collider2D BedObstacle => bedCollider;
     private StageVisuals visuals;
+    private Transform fragmentArrow;
+    private LineRenderer fragmentArrowGold;
+    private float fragmentArrowOrbit;
     private readonly List<StagePickup> fragments = new List<StagePickup>();
     private readonly List<Vector2> fragmentPositions = new List<Vector2>();
     private Transform ritual;
@@ -23,6 +26,7 @@ public class FirstStageObjective : MonoBehaviour
     public Vector3 RitualPosition => ritual.position;
     public Vector3 ExitPosition => exit.position;
     public IReadOnlyList<Vector2> FragmentPositions => fragmentPositions;
+    public IReadOnlyList<StagePickup> Fragments => fragments;
 
     public void Initialize(MatchStats stats)
     {
@@ -55,22 +59,20 @@ public class FirstStageObjective : MonoBehaviour
         visuals.Outline(ritual, "Runas", new[] { new Vector3(-1, -0.7f), new Vector3(0, 1.1f), new Vector3(1, -0.7f) }, Color.magenta);
         exit = new GameObject("Saída do quarto").transform;
         exit.SetParent(transform, false);
-        exit.position = new Vector3(bounds.center.x, bounds.yMax - 3f);
+        exit.gameObject.SetActive(false);
         exitOutline = visuals.Outline(exit, "Porta", new[] {
             new Vector3(-1, -1.4f), new Vector3(-1, 1.4f), new Vector3(1, 1.4f), new Vector3(1, -1.4f)
         }, new Color(0.5f, 0.3f, 0.3f), 0.2f);
         RequiredFragments = Mathf.Clamp(match.Rules.fragmentCount, 2, 12);
-        float separation = match.Rules.minimumFragmentPixels / Mathf.Max(1f, match.Rules.referencePixelsPerUnit);
-        Vector2 first = Clamp((Vector2)match.Player.transform.position + new Vector2(2.5f, 1f), bounds);
-        AddFragment(first);
-        for (int i = 1; i < RequiredFragments; i++)
+        float separation = FragmentSeparation;
+        for (int i = 0; i < RequiredFragments; i++)
         {
             bool placed = false;
             for (int attempt = 0; attempt < 1024; attempt++)
             {
                 Vector2 point = new Vector2(Random.Range(bounds.xMin + 4f, bounds.xMax - 4f),
                     Random.Range(bounds.yMin + 4f, bounds.yMax - 4f));
-                if (Vector2.Distance(point, ritual.position) < 4f || IsFurnitureBlocked(point, 0.85f)) continue;
+                if (!IsFragmentPositionClear(point)) continue;
                 bool clear = true;
                 foreach (Vector2 other in fragmentPositions)
                     if (Vector2.Distance(point, other) < separation) { clear = false; break; }
@@ -87,6 +89,63 @@ public class FirstStageObjective : MonoBehaviour
             }
         }
 
+    }
+
+    private float FragmentSeparation => Mathf.Max(5f, match.Rules.minimumFragmentDistance,
+        match.Rules.minimumFragmentPixels / Mathf.Max(1f, match.Rules.referencePixelsPerUnit));
+
+    private bool IsFragmentPositionClear(Vector2 point)
+    {
+        return !IsFurnitureBlocked(point, 0.85f)
+            && Vector2.Distance(point, ritual.position) >= 4f
+            && Vector2.Distance(point, match.Player.transform.position) >= Mathf.Max(8f, match.Rules.pickupRadius + 2f);
+    }
+
+    public void RelocateRemainingFragments()
+    {
+        if (match == null || match.Finished || match.IsPaused || Assembled) return;
+        var remaining = new List<StagePickup>();
+        foreach (StagePickup fragment in fragments)
+            if (fragment != null && fragment.gameObject.activeInHierarchy) remaining.Add(fragment);
+        if (remaining.Count == 0) return;
+        Rect bounds = HouseFloor.Active != null ? HouseFloor.Active.Bounds : new Rect(-50, -50, 100, 100);
+        var positions = new List<Vector2>(remaining.Count);
+        float separation = FragmentSeparation;
+        float relocation = Mathf.Max(1f, match.Rules.fragmentRelocationDistance);
+        // Plan a complete layout before moving anything; never partially relocate a group.
+        for (int layout = 0; layout < 32; layout++)
+        {
+            positions.Clear();
+            foreach (StagePickup fragment in remaining)
+            {
+                bool placed = false;
+                for (int attempt = 0; attempt < 1024; attempt++)
+                {
+                    Vector2 point = new Vector2(Random.Range(bounds.xMin + 4f, bounds.xMax - 4f),
+                        Random.Range(bounds.yMin + 4f, bounds.yMax - 4f));
+                    if (!IsFragmentPositionClear(point)
+                        || Vector2.Distance(point, fragment.transform.position) < relocation) continue;
+                    bool clear = true;
+                    foreach (Vector2 other in positions)
+                        if (Vector2.Distance(point, other) < separation) { clear = false; break; }
+                    if (!clear) continue;
+                    positions.Add(point);
+                    placed = true;
+                    break;
+                }
+                if (!placed) break;
+            }
+            if (positions.Count != remaining.Count) continue;
+            for (int i = 0; i < remaining.Count; i++)
+            {
+                Vector3 old = remaining[i].transform.position;
+                remaining[i].transform.position = new Vector3(positions[i].x, positions[i].y, old.z);
+            }
+            fragmentPositions.Clear();
+            fragmentPositions.AddRange(positions);
+            return;
+        }
+        Debug.LogWarning("Fragment relocation has no valid layout; keeping existing positions. Check spacing and room size.", this);
     }
 
     private static Vector2 Clamp(Vector2 point, Rect bounds) => new Vector2(
@@ -128,7 +187,11 @@ public class FirstStageObjective : MonoBehaviour
 
     public void Collect(StagePickup pickup)
     {
-        if (pickup.Kind == StagePickupKind.Fragment) CollectedFragments++;
+        if (pickup.Kind == StagePickupKind.Fragment)
+        {
+            CollectedFragments++;
+            TryAssemble();
+        }
         else if (pickup.Kind == StagePickupKind.Ring)
         {
             RingCollected = true;
@@ -142,41 +205,24 @@ public class FirstStageObjective : MonoBehaviour
 
     public bool TryAssemble()
     {
-        if (match.Finished || match.IsPaused || Assembled || CollectedFragments < RequiredFragments
-            || Vector2.Distance(match.Player.transform.position, ritual.position) > 2.5f) return false;
+        if (match.Finished || match.IsPaused || Assembled || RequiredFragments <= 0
+            || CollectedFragments < RequiredFragments) return false;
         Assembled = true;
         ritualCircle.startColor = ritualCircle.endColor = Color.red;
+        match.PrepareBossEncounter();
         match.NotifyChanged();
         return true;
     }
 
     public void DropRewards(Vector3 position)
     {
+        // MatchStats captures the boss position before removing enemies.
+        // The exit uses that exact point, without the pickups' boundary clamping.
+        exit.position = position;
+        exit.gameObject.SetActive(true);
         Rect bounds = HouseFloor.Active != null ? HouseFloor.Active.Bounds : new Rect(-50, -50, 100, 100);
         CreatePickup(StagePickupKind.Ring, Clamp((Vector2)position + Vector2.left, bounds));
         CreatePickup(StagePickupKind.Letter, Clamp((Vector2)position + Vector2.right, bounds));
-    }
-
-    public Vector3 GuidanceTarget
-    {
-        get
-        {
-            if (match.BossDefeated)
-            {
-                foreach (StagePickup pickup in GetComponentsInChildren<StagePickup>())
-                    if (pickup.Kind != StagePickupKind.Fragment) return pickup.transform.position;
-                return ExitPosition;
-            }
-            StagePickup nearest = null;
-            float best = float.MaxValue;
-            foreach (StagePickup fragment in fragments)
-            {
-                if (fragment == null || !fragment.gameObject.activeSelf) continue;
-                float distance = (fragment.transform.position - match.Player.transform.position).sqrMagnitude;
-                if (distance < best) { best = distance; nearest = fragment; }
-            }
-            return nearest != null ? nearest.transform.position : RitualPosition;
-        }
     }
 
     public string Instruction
@@ -190,8 +236,65 @@ public class FirstStageObjective : MonoBehaviour
             if (match.BossSpawned) return "Derrote Gunter. Afaste-se do círculo vermelho!";
             return CollectedFragments < RequiredFragments
                 ? $"Encontre os fragmentos amaldiçoados: {CollectedFragments}/{RequiredFragments}"
-                : "Volte ao selo e pressione E para unir os fragmentos.";
+                : "Fragmentos completos. Gunter está chegando!";
         }
+    }
+
+    private void CreateFragmentArrow()
+    {
+        SpriteRenderer playerVisual = match.Player.GetComponent<SpriteRenderer>();
+        fragmentArrow = new GameObject("Guia do fragmento mais proximo").transform;
+        fragmentArrow.SetParent(transform, false);
+        // Independent of the player's facing direction and animation scale.
+        fragmentArrowOrbit = playerVisual != null
+            ? Mathf.Max(1.2f, Mathf.Max(playerVisual.bounds.extents.x, playerVisual.bounds.extents.y) + 0.8f)
+            : 1.5f;
+        Vector3[] shape = {
+            new Vector3(-0.45f, -0.1f), new Vector3(0f, -0.1f),
+            new Vector3(0f, -0.3f), new Vector3(0.45f, 0f),
+            new Vector3(0f, 0.3f), new Vector3(0f, 0.1f),
+            new Vector3(-0.45f, 0.1f)
+        };
+        LineRenderer outline = visuals.Outline(fragmentArrow, "Contorno", shape, Color.black, 0.20f);
+        fragmentArrowGold = visuals.Outline(fragmentArrow, "Seta dourada", shape, new Color(1f, 0.8f, 0.1f), 0.11f);
+        outline.sortingLayerID = fragmentArrowGold.sortingLayerID = playerVisual != null ? playerVisual.sortingLayerID : 0;
+        outline.sortingOrder = playerVisual != null ? Mathf.Max(100, playerVisual.sortingOrder + 10) : 100;
+        fragmentArrowGold.sortingOrder = outline.sortingOrder + 1;
+    }
+
+    private void LateUpdate()
+    {
+        StagePickup nearest = null;
+        float nearestDistance = float.PositiveInfinity;
+        if (match != null && match.Player != null && !match.Finished && !Assembled && !match.IsBlackout)
+        {
+            foreach (StagePickup fragment in fragments)
+            {
+                if (fragment == null || !fragment.gameObject.activeInHierarchy) continue;
+                float distance = ((Vector2)fragment.transform.position - (Vector2)match.Player.transform.position).sqrMagnitude;
+                if (distance >= nearestDistance) continue;
+                nearestDistance = distance;
+                nearest = fragment;
+            }
+        }
+        if (nearest == null || nearestDistance < 0.0001f)
+        {
+            if (fragmentArrow != null) fragmentArrow.gameObject.SetActive(false);
+            return;
+        }
+        if (fragmentArrow == null) CreateFragmentArrow();
+        fragmentArrow.gameObject.SetActive(true);
+        Vector2 direction = ((Vector2)nearest.transform.position - (Vector2)match.Player.transform.position).normalized;
+        fragmentArrow.position = match.Player.transform.position + (Vector3)(direction * fragmentArrowOrbit);
+        fragmentArrow.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
+        float pulse = 0.5f + 0.5f * Mathf.Sin(Time.time * 3f);
+        fragmentArrowGold.startColor = fragmentArrowGold.endColor =
+            Color.Lerp(new Color(1f, 0.7f, 0.08f), new Color(1f, 0.95f, 0.45f), pulse);
+    }
+
+    private void OnDisable()
+    {
+        if (fragmentArrow != null) fragmentArrow.gameObject.SetActive(false);
     }
 
     private void Update()

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -9,6 +9,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField, Min(0.1f)] private float secondsPerHeal = 5f;
     [SerializeField, Min(1)] private int healAmount = 1;
     private PlayerExperience experience;
+    private MatchStats match;
     private float healingElapsed;
     public int MaxHealth => maxHealth;
     public int CurrentHealth { get; private set; }
@@ -21,13 +22,21 @@ public class PlayerHealth : MonoBehaviour
         maxHealth = Mathf.Max(1, maxHealth);
         CurrentHealth = maxHealth;
         experience = GetComponent<PlayerExperience>();
+        match = FindFirstObjectByType<MatchStats>();
         HealthChanged?.Invoke();
     }
 
     private void Update()
     {
-        if (CurrentHealth <= 0 || CurrentHealth >= MaxHealth) { healingElapsed = 0; return; }
-        healingElapsed += Time.deltaTime * (experience != null ? experience.HealingSpeedMultiplier : 1f);
+        if (CurrentHealth <= 0 || CurrentHealth >= MaxHealth
+            || experience == null || !experience.HasHealingAbility)
+        {
+            healingElapsed = 0f;
+            return;
+        }
+        if (Time.deltaTime <= 0f || experience.HasUpgradeChoice
+            || (match != null && (match.Finished || match.IsPaused))) return;
+        healingElapsed += Time.deltaTime * experience.HealingSpeedMultiplier;
         if (healingElapsed < secondsPerHeal) return;
         healingElapsed -= secondsPerHeal;
         Heal(healAmount);

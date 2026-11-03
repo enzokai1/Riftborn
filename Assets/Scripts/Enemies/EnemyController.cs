@@ -25,6 +25,23 @@ public class EnemyController : MonoBehaviour
     private bool moving;
     public Transform Target => target;
     public bool IsAttacking { get; private set; }
+    public bool IsDashing => dashRemaining > 0f;
+    private float dashRemaining;
+    private float dashSpeed;
+
+    public void BeginDash(float speed, float duration)
+    {
+        if (!enabled || IsAttacking) return;
+        dashSpeed = Mathf.Max(1f, speed);
+        dashRemaining = Mathf.Max(0.1f, duration);
+        body.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+    }
+
+    public void StopDash()
+    {
+        dashRemaining = 0f;
+        body.linearVelocity = Vector2.zero;
+    }
 
     private void Awake()
     {
@@ -57,7 +74,9 @@ public class EnemyController : MonoBehaviour
             return;
         }
         Vector2 offset = PursuitWaypoint() - body.position;
-        float speed = Mathf.Min(movementSpeed, offset.magnitude / Time.fixedDeltaTime);
+        float currentSpeed = IsDashing ? dashSpeed : movementSpeed;
+        dashRemaining = Mathf.Max(0f, dashRemaining - Time.fixedDeltaTime);
+        float speed = Mathf.Min(currentSpeed, offset.magnitude / Time.fixedDeltaTime);
         moving = speed > 0.01f;
         body.linearVelocity = offset.normalized * speed;
     }
@@ -202,6 +221,7 @@ public class EnemyController : MonoBehaviour
 
     private void OnDisable()
     {
+        dashRemaining = 0f;
         IsAttacking = false;
         animationElapsed = 0f;
         moving = false;

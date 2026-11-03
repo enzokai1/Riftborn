@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +10,18 @@ public class PlayerExperience : MonoBehaviour
     [SerializeField, Min(1)] private int baseExperience = 20;
     [Tooltip("O x do GDD é interpretado como bônus máximo de dano.")]
     [SerializeField, Min(3)] private int maximumPowerBonus = 30;
+    [Header("Atração de XP")]
+    [SerializeField, Min(0f)] private float experienceAttractionRadius = 4f;
+    [SerializeField, Min(0.1f)] private float experienceAttractionSpeed = 8f;
+    public float ExperienceAttractionRadius => Mathf.Max(0f, experienceAttractionRadius);
+    public float ExperienceAttractionSpeed => Mathf.Max(0.1f, experienceAttractionSpeed);
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(0.55f, 0.36f, 0.96f, 0.65f);
+        Gizmos.DrawWireSphere(transform.position, ExperienceAttractionRadius);
+    }
+
     private readonly int[] ranks = new int[4];
     private readonly List<UpgradeKind> choices = new List<UpgradeKind>(3);
 
@@ -23,7 +35,9 @@ public class PlayerExperience : MonoBehaviour
     public int DamageBonus => Mathf.RoundToInt(maximumPowerBonus * Rank(UpgradeKind.Power) / 3f);
     public int ProjectileCount => Rank(UpgradeKind.Projectiles) == 0 ? 1 : Rank(UpgradeKind.Projectiles) * 2;
     public float AttackSpeedMultiplier => 1f + Rank(UpgradeKind.AttackSpeed) * 0.5f;
-    public float HealingSpeedMultiplier => 1f + Rank(UpgradeKind.HealingSpeed) * 0.5f;
+    public bool HasHealingAbility => Rank(UpgradeKind.HealingSpeed) > 0;
+    public float HealingSpeedMultiplier => HasHealingAbility
+        ? 1f + (Rank(UpgradeKind.HealingSpeed) - 1) * 0.5f : 0f;
     public event Action ExperienceChanged;
     public int Rank(UpgradeKind kind) => ranks[(int)kind];
 
@@ -91,7 +105,9 @@ public class PlayerExperience : MonoBehaviour
             case UpgradeKind.Power: return $"PODER {next}/3\n+{Mathf.RoundToInt(maximumPowerBonus * next / 3f)} de dano";
             case UpgradeKind.Projectiles: return $"PROJÉTEIS {next}/3\n{next * 2} esferas por disparo";
             case UpgradeKind.AttackSpeed: return $"VELOCIDADE DE ATAQUE {next}/3\n{1f + next * 0.5f:0.0}x a cadência inicial";
-            default: return $"VELOCIDADE DE CURA {next}/3\n{1f + next * 0.5f:0.0}x a regeneração inicial";
+            default: return next == 1
+                ? "REGENERA\u00c7\u00c3O 1/3\nDesbloqueia cura passiva lenta"
+                : $"REGENERA\u00c7\u00c3O {next}/3\n{1f + (next - 1) * 0.5f:0.0}x a velocidade de cura passiva";
         }
     }
 }

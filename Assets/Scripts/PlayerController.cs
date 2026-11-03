@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Tooltip("Movement speed in Unity units per second.")]
-    [SerializeField, Min(0f)] private float movementSpeed = 3f;
+    [SerializeField, Min(0f)] private float movementSpeed = 2f;
 
     private Rigidbody2D body;
     private Vector2 movementDirection;

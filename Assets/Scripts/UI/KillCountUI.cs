@@ -25,7 +25,7 @@ public class KillCountUI : MonoBehaviour
             : matchStats.Victory ? "QUARTO CONCLUÍDO"
             : matchStats.BossDefeated ? "GUNTER DERROTADO"
             : matchStats.BossSpawned ? "DERROTE GUNTER"
-            : $"Fantasmas: {matchStats.GhostKills}/{MatchStats.GhostTarget}\nRestam: {matchStats.GhostsRemaining}";
+            : $"Derrotados: {matchStats.GhostKills}\n{matchStats.FragmentProgress}";
     }
 }
 

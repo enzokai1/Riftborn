@@ -20,7 +20,6 @@ public class PlayerSpriteAnimation : MonoBehaviour
 
     private enum Facing { Down, Up, Left, Right }
     private PlayerController controller;
-    private Rigidbody2D body;
     private SpriteRenderer spriteRenderer;
     private Weapon weapon;
     private Facing facing;
@@ -41,7 +40,6 @@ public class PlayerSpriteAnimation : MonoBehaviour
     private void Awake()
     {
         controller = GetComponent<PlayerController>();
-        body = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         weapon = GetComponentInChildren<Weapon>();
     }
@@ -103,19 +101,26 @@ public class PlayerSpriteAnimation : MonoBehaviour
         }
         if (Time.timeScale == 0f) return;
 
-        Vector2 direction = body != null ? body.linearVelocity : controller.MovementDirection;
-        bool moving = controller.isActiveAndEnabled && controller.MovementDirection.sqrMagnitude > 0.001f
-            && direction.sqrMagnitude > 0.0025f;
-        Facing nextFacing = moving ? DirectionToFacing(controller.MovementDirection) : facing;
-        if (!moving || !wasMoving || nextFacing != facing) walkElapsed = 0f;
-        else walkElapsed += Time.deltaTime;
-        facing = nextFacing;
+        // Input is sampled every rendered frame; physics velocity may briefly be zero
+        // between steps or during contact. Keep the walk cycle continuous on turns.
+        Vector2 direction = controller.MovementDirection;
+        bool moving = controller.isActiveAndEnabled && direction.sqrMagnitude > 0.001f;
+        if (!moving || !wasMoving) walkElapsed = 0f;
+        if (moving)
+        {
+            facing = DirectionToFacing(direction);
+            Sprite[] walkFrames = Frames(facing, false);
+            int frameCount = walkFrames != null ? walkFrames.Length : 0;
+            if (frameCount > 0)
+                walkElapsed = (walkElapsed + Time.deltaTime)
+                    % (frameCount / Mathf.Max(1f, framesPerSecond));
+        }
         wasMoving = moving;
 
         if (shooting && (weapon == null || !weapon.isActiveAndEnabled || !weapon.HasEnemyInRange))
             shooting = false;
-        // Keep the walk cycle visible during automatic fire; standing casts keep their animation.
-        if (shooting && moving) shooting = false;
+        // Casting changes the pose without interrupting movement.
+        // The walk cycle keeps advancing and resumes after the shot.
         if (shooting)
         {
             Sprite[] shots = Frames(shotFacing, true);

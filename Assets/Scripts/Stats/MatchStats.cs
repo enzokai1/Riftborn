@@ -8,16 +8,22 @@ public class MatchStats : MonoBehaviour
 {
     [SerializeField] private FirstStageSettings settings = new FirstStageSettings();
     public FirstStageSettings Rules => settings;
-    public const int GhostTarget = 50;
-    public int GhostsRemaining => Mathf.Max(0, GhostTarget - GhostKills);
-    public bool BossReady => GhostsRemaining == 0 || (Objective != null && Objective.Assembled);
-    private int ghostsSpawned;
+    public bool BossReady => Objective != null && Objective.Assembled;
+    public string FragmentProgress => Objective != null
+        ? $"Fragmentos: {Objective.CollectedFragments}/{Objective.RequiredFragments}"
+        : "Colete os fragmentos";
 
-    public bool TryReserveGhost()
+    public bool TryReserveGhost() => CombatActive && !IsPaused && !BossReady && !BossSpawned;
+
+    public void PrepareBossEncounter()
     {
-        if (!CombatActive || BossSpawned || ghostsSpawned >= GhostTarget) return false;
-        ghostsSpawned++;
-        return true;
+        if (!CombatActive || !BossReady || BossSpawned) return;
+        // Remove the wave immediately, without invoking kill rewards or pausing for XP.
+        foreach (EnemyHealth enemy in FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None))
+        {
+            enemy.gameObject.SetActive(false);
+            Destroy(enemy.gameObject);
+        }
     }
     public int KillCount { get; private set; }
     public int GhostKills { get; private set; }
@@ -30,6 +36,27 @@ public class MatchStats : MonoBehaviour
     public bool CombatActive => !Finished && !BossDefeated;
     public bool IsPaused => !Finished && (userPaused || (Experience != null && Experience.HasUpgradeChoice));
     public float ElapsedSeconds { get; private set; }
+    // Driven by match time so pauses and upgrade menus freeze the whole effect.
+    private float BlackoutPhase => (ElapsedSeconds - Mathf.Max(10f, Rules.blackoutFirstDelay))
+        % Mathf.Max(Rules.blackoutDuration + 12f, Rules.blackoutInterval);
+    private bool CanBlackout => CombatActive && Objective != null && !BossReady
+        && !BossSpawned && ElapsedSeconds >= Mathf.Max(10f, Rules.blackoutFirstDelay);
+    public bool IsBlackout => CanBlackout && BlackoutPhase >= 2f
+        && BlackoutPhase < 2f + Mathf.Max(2f, Rules.blackoutDuration);
+    public float BlackoutDarkness
+    {
+        get
+        {
+            if (!CanBlackout) return 0f;
+            float phase = BlackoutPhase;
+            // Two slow dimming pulses signal the approaching darkness.
+            if (phase < 2f) return 0.3f * Mathf.Pow(Mathf.Sin(phase * Mathf.PI), 2f);
+            float age = phase - 2f;
+            float duration = Mathf.Max(2f, Rules.blackoutDuration);
+            if (age >= duration) return 0f;
+            return Mathf.SmoothStep(0f, 1f, Mathf.Min(age / 0.7f, (duration - age) / 1f));
+        }
+    }
     public EnemyHealth Boss { get; private set; }
     public PlayerHealth Player { get; private set; }
     public PlayerExperience Experience { get; private set; }
@@ -63,7 +90,16 @@ public class MatchStats : MonoBehaviour
             userPaused = !userPaused;
             RefreshPause();
         }
-        if (CombatActive && !IsPaused) ElapsedSeconds += Time.deltaTime;
+        if (CombatActive && !IsPaused)
+        {
+            float firstEnd = Mathf.Max(10f, Rules.blackoutFirstDelay) + 2f + Mathf.Max(2f, Rules.blackoutDuration);
+            float cycle = Mathf.Max(Rules.blackoutDuration + 12f, Rules.blackoutInterval);
+            int previousEnd = Mathf.FloorToInt((ElapsedSeconds - firstEnd) / cycle);
+            ElapsedSeconds += Time.deltaTime;
+            int currentEnd = Mathf.FloorToInt((ElapsedSeconds - firstEnd) / cycle);
+            if (currentEnd >= 0 && currentEnd > previousEnd && Objective != null && !BossReady && !BossSpawned)
+                Objective.RelocateRemainingFragments();
+        }
     }
 
     public void Resume() { userPaused = false; RefreshPause(); }
@@ -79,7 +115,8 @@ public class MatchStats : MonoBehaviour
 
     public bool TryReserveBoss()
     {
-        if (!CombatActive || !BossReady || BossSpawned) return false;
+        if (!CombatActive || IsPaused || !BossReady || BossSpawned) return false;
+        PrepareBossEncounter();
         BossSpawned = true;
         NotifyChanged();
         return true;

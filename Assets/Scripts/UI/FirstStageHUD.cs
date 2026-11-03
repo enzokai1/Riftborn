@@ -53,49 +53,6 @@ public class FirstStageHUD : MonoBehaviour
     }
 
 
-    private void DrawCompass(Vector2 delta)
-    {
-        Vector2 center = new Vector2(1216, 160);
-        Color old = GUI.color;
-        for (int i = 0; i < 48; i++)
-        {
-            float a = i * Mathf.PI * 2f / 48f;
-            float b = (i + 1) * Mathf.PI * 2f / 48f;
-            DrawLine(center + new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * 38f,
-                center + new Vector2(Mathf.Cos(b), Mathf.Sin(b)) * 38f,
-                new Color(0.75f, 0.69f, 0.85f), 2f);
-        }
-        for (int i = 0; i < 8; i++)
-        {
-            float angle = i * Mathf.PI / 4f;
-            Vector2 axis = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-            DrawLine(center + axis * 30f, center + axis * 36f, Color.white, 2f);
-        }
-        Vector2 direction = new Vector2(delta.x, -delta.y).normalized;
-        if (direction.sqrMagnitude > 0.01f)
-        {
-            Vector2 tip = center + direction * 27f;
-            Vector2 side = new Vector2(-direction.y, direction.x);
-            Color needle = new Color(1f, 0.65f, 0.25f);
-            DrawLine(center - direction * 20f, tip, needle, 3f);
-            DrawLine(tip, tip - direction * 11f + side * 7f, needle, 3f);
-            DrawLine(tip, tip - direction * 11f - side * 7f, needle, 3f);
-        }
-        GUI.color = old;
-    }
-
-    private static void DrawLine(Vector2 from, Vector2 to, Color color, float width)
-    {
-        Matrix4x4 matrix = GUI.matrix;
-        Color previous = GUI.color;
-        Vector2 delta = to - from;
-        GUIUtility.RotateAroundPivot(Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg, from);
-        GUI.color = color;
-        GUI.DrawTexture(new Rect(from.x, from.y - width * 0.5f, delta.magnitude, width), Texture2D.whiteTexture);
-        GUI.color = previous;
-        GUI.matrix = matrix;
-    }
-
     private static void Bar(Rect rect, float progress, Color fill)
     {
         Color previous = GUI.color;
@@ -141,21 +98,67 @@ public class FirstStageHUD : MonoBehaviour
         GUI.Label(new Rect(958, 24, 288, 28), $"FASE 1   {seconds / 60:00}:{seconds % 60:00}", title);
         string progress = match.BossDefeated ? "Gunter derrotado"
             : match.BossSpawned ? "Resta: Gunter"
-            : $"Fantasmas: {match.GhostKills}/{MatchStats.GhostTarget}  |  Restam: {match.GhostsRemaining}";
+            : $"Derrotados: {match.GhostKills}\n{match.FragmentProgress}";
         GUI.Label(new Rect(958, 60, 288, 40), progress, body);
+    }
+
+    private Texture2D blackoutMask;
+
+    private void DrawBlackout()
+    {
+        float darkness = match.BlackoutDarkness;
+        Camera camera = Camera.main;
+        if (darkness <= 0f || camera == null || match.Player == null) return;
+        if (blackoutMask == null)
+        {
+            const int size = 256;
+            blackoutMask = new Texture2D(size, size, TextureFormat.RGBA32, false);
+            blackoutMask.name = "Blackout vision mask";
+            blackoutMask.hideFlags = HideFlags.HideAndDontSave;
+            blackoutMask.wrapMode = TextureWrapMode.Clamp;
+            blackoutMask.filterMode = FilterMode.Bilinear;
+            var pixels = new Color[size * size];
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                float distance = new Vector2((x + 0.5f) / size * 2f - 1f,
+                    (y + 0.5f) / size * 2f - 1f).magnitude;
+                float alpha = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.55f, 1f, distance));
+                pixels[y * size + x] = new Color(0.015f, 0.01f, 0.025f, alpha);
+            }
+            blackoutMask.SetPixels(pixels);
+            blackoutMask.Apply(false, true);
+        }
+        Vector3 world = match.Player.transform.position;
+        Vector3 screen = camera.WorldToScreenPoint(world);
+        Vector3 edge = camera.WorldToScreenPoint(world + camera.transform.right * Mathf.Max(2f, match.Rules.blackoutVisionRadius));
+        float diameter = Mathf.Max(1f, Vector2.Distance(screen, edge) * 2f);
+        Rect uv = new Rect(0.5f - screen.x / diameter, 0.5f - screen.y / diameter,
+            Screen.width / diameter, Screen.height / diameter);
+        Matrix4x4 matrix = GUI.matrix;
+        Color color = GUI.color;
+        GUI.matrix = Matrix4x4.identity;
+        GUI.color = new Color(1f, 1f, 1f, darkness);
+        GUI.DrawTextureWithTexCoords(new Rect(0, 0, Screen.width, Screen.height), blackoutMask, uv, true);
+        GUI.color = color;
+        GUI.matrix = matrix;
+    }
+
+    private void OnDestroy()
+    {
+        if (blackoutMask != null) Destroy(blackoutMask);
     }
 
     private void OnGUI()
     {
         if (match == null || match.Objective == null) return;
         Styles();
+        DrawBlackout();
         Matrix4x4 previous = GUI.matrix;
         GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(Screen.width / 1280f, Screen.height / 720f, 1));
         DrawStatus();
         Panel(new Rect(18, 18, 325, 90));
         GUI.Label(new Rect(34, 30, 293, 68), match.Objective.Instruction, body);
-        if ((!match.BossSpawned || match.BossDefeated) && !match.Finished)
-            DrawCompass((Vector2)(match.Objective.GuidanceTarget - match.Player.transform.position));
         if (match.Boss != null && !match.BossDefeated && !match.Finished)
         {
             Panel(new Rect(425, 115, 430, 65));

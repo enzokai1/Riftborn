@@ -35,10 +35,13 @@ public class EnemySpawner : MonoBehaviour
         if (matchStats.BossSpawned) return;
         int wave = FirstStageSettings.WaveAt(matchStats.ElapsedSeconds);
         elapsedTime += Time.deltaTime;
-        float interval = FirstStageSettings.SpawnInterval(wave);
+        float interval = matchStats.Rules.TimedSpawnInterval(matchStats.ElapsedSeconds);
         if (elapsedTime < interval) return;
         elapsedTime -= interval;
-        for (int i = 0; i < FirstStageSettings.SpawnCount(wave); i++) SpawnEnemy(false, wave);
+        int alive = FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None).Length;
+        int count = Mathf.Min(matchStats.Rules.TimedSpawnCount(matchStats.ElapsedSeconds),
+            Mathf.Max(1, matchStats.Rules.maximumAliveGhosts) - alive);
+        for (int i = 0; i < count; i++) SpawnEnemy(false, wave);
     }
 
     private void SpawnEnemy(bool boss, int wave)
@@ -75,7 +78,9 @@ public class EnemySpawner : MonoBehaviour
             contact.SetDamage(rules.bossContactDamage);
             reporter.MarkAsBoss();
             matchStats.SetBoss(health);
-            enemy.AddComponent<GunterAreaAttack>().Initialize(matchStats, visual);
+            GunterAreaAttack area = enemy.AddComponent<GunterAreaAttack>();
+            area.Initialize(matchStats, visual);
+            contact.ConfigureBossDash(matchStats, area);
         }
         else
         {
@@ -85,9 +90,11 @@ public class EnemySpawner : MonoBehaviour
             enemy.name = names[wave];
             visual.color = colors[wave];
             health.ConfigureHealth(Mathf.CeilToInt(rules.ghostHealth * multiplier));
-            contact.SetDamage(Mathf.CeilToInt(rules.ghostDamage * multiplier));
+            contact.SetDamage(rules.ghostDamage);
             controller.SetMovementSpeed(rules.ghostSpeed);
         }
+        health.EnableTimeScaling(matchStats, boss ? rules.bossContactDamage : rules.ghostDamage,
+            boss ? rules.bossSpeed : rules.ghostSpeed);
     }
 }
 

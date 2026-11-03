@@ -174,11 +174,11 @@ MonoBehaviour:
     ghostHealth: 20
     ghostDamage: 5
     ghostSpeed: 1.8
-    bossHealth: 1200
+    bossHealth: 20000
     bossContactDamage: 15
     bossAreaDamage: 20
     bossSpeed: 2.2
-    bossAreaRadius: 3.5
+    bossAreaRadius: 4
     bossAttackInterval: 6
     bossWarningDuration: 1.25
     ringCooldown: 30

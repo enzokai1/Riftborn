@@ -850,7 +850,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57be6a0777359ee4dba186b0ffad2c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  movementSpeed: 3
+  movementSpeed: 2
 --- !u!114 &648273954
 MonoBehaviour:
   m_ObjectHideFlags: 0

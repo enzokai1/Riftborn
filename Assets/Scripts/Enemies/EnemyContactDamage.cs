@@ -17,6 +17,17 @@ public class EnemyContactDamage : MonoBehaviour
     private float elapsed;
     private bool attacking;
     private bool hitApplied;
+    private MatchStats bossMatch;
+    private GunterAreaAttack bossArea;
+    private bool dashApproach;
+    public bool IsBusy => attacking || dashApproach;
+
+    public void ConfigureBossDash(MatchStats stats, GunterAreaAttack area)
+    {
+        bossMatch = stats;
+        bossArea = area;
+        nextAttackTime = Time.time + 0.75f;
+    }
 
     public void SetDamage(int amount) => damage = Mathf.Max(1, amount);
 
@@ -36,6 +47,16 @@ public class EnemyContactDamage : MonoBehaviour
             playerCollider = controller.Target.GetComponent<Collider2D>();
         }
         if (player == null || player.CurrentHealth <= 0) return;
+        if (bossMatch != null && (!bossMatch.CombatActive || bossMatch.IsPaused
+            || (bossArea != null && bossArea.IsWarning))) return;
+        if (dashApproach)
+        {
+            if (controller.IsDashing && !InRange()) return;
+            controller.StopDash();
+            dashApproach = false;
+            StartSwing();
+            return;
+        }
         if (attacking)
         {
             elapsed += Time.deltaTime;
@@ -48,11 +69,26 @@ public class EnemyContactDamage : MonoBehaviour
             if (elapsed >= attackDuration) attacking = false;
             return;
         }
-        if (Time.time < nextAttackTime || !InRange()) return;
+        if (Time.time < nextAttackTime) return;
+        if (bossMatch != null)
+        {
+            if (!controller.enabled || controller.IsAttacking) return;
+            if (Vector2.Distance(transform.position, player.transform.position) > bossMatch.Rules.bossDashRange) return;
+            controller.BeginDash(bossMatch.Rules.bossDashSpeed, bossMatch.Rules.bossDashDuration);
+            dashApproach = true;
+            return;
+        }
+        if (!InRange()) return;
+        StartSwing();
+    }
+
+    private void StartSwing()
+    {
         attacking = true;
         hitApplied = false;
         elapsed = 0f;
-        nextAttackTime = Time.time + Mathf.Max(damageInterval, attackDuration);
+        nextAttackTime = Time.time + Mathf.Max(attackDuration,
+            bossMatch != null ? bossMatch.Rules.bossDashCooldown : damageInterval);
         controller.PlayAttack(attackDuration);
     }
 
@@ -65,6 +101,8 @@ public class EnemyContactDamage : MonoBehaviour
 
     private void OnDisable()
     {
+        if (dashApproach && controller != null) controller.StopDash();
+        dashApproach = false;
         attacking = false;
         hitApplied = false;
         nextAttackTime = 0f;

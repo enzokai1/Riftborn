@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(CircleCollider2D))]
@@ -7,6 +7,7 @@ public class ExperiencePickup : MonoBehaviour
     [SerializeField, Min(1)] private int experienceAmount = 5;
     [SerializeField, Min(0.1f)] private float collectionRadius = 1.5f;
     private bool collected;
+    private bool attracted;
     private PlayerExperience player;
     private PlayerHealth health;
     private MatchStats match;
@@ -20,7 +21,23 @@ public class ExperiencePickup : MonoBehaviour
 
     private void Update()
     {
-        if (player != null && Vector2.Distance(transform.position, player.transform.position) <= collectionRadius)
+        if (player == null || !CanCollect) return;
+
+        Vector3 target = player.transform.position;
+        target.z = transform.position.z;
+        float distance = Vector2.Distance(transform.position, target);
+        if (distance <= collectionRadius)
+        {
+            TryCollect(player);
+            return;
+        }
+
+        // Once inside the field, the orb follows the player until collected.
+        if (distance <= player.ExperienceAttractionRadius) attracted = true;
+        if (!attracted) return;
+        transform.position = Vector3.MoveTowards(transform.position, target,
+            player.ExperienceAttractionSpeed * Time.deltaTime);
+        if (Vector2.Distance(transform.position, target) <= collectionRadius)
             TryCollect(player);
     }
 
@@ -29,10 +46,13 @@ public class ExperiencePickup : MonoBehaviour
         if (other.TryGetComponent(out PlayerExperience experience)) TryCollect(experience);
     }
 
+    private bool CanCollect => !collected && Time.timeScale > 0f
+        && (health == null || health.CurrentHealth > 0)
+        && (match == null || (match.CombatActive && !match.IsPaused));
+
     private void TryCollect(PlayerExperience experience)
     {
-        if (collected || Time.timeScale == 0 || (health != null && health.CurrentHealth <= 0)
-            || (match != null && !match.CombatActive)) return;
+        if (!CanCollect) return;
         collected = true;
         experience.AddExperience(Mathf.Max(1, experienceAmount));
         gameObject.SetActive(false);
