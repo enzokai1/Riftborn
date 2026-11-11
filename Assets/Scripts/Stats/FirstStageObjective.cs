@@ -175,10 +175,7 @@ public class FirstStageObjective : MonoBehaviour
         }
         else
         {
-            visuals.Outline(obj.transform, "Fragmento amaldiçoado", new[] {
-                new Vector3(0, 0.7f), new Vector3(0.45f, 0), new Vector3(0, -0.7f), new Vector3(-0.45f, 0)
-            }, new Color(0.85f, 0.5f, 1f), 0.13f);
-            visuals.Block(obj.transform, "Núcleo", Vector2.zero, Vector2.one * 0.18f, Color.white, 21);
+            obj.AddComponent<FragmentVisual>().Initialize(visuals, match);
         }
         var pickup = obj.AddComponent<StagePickup>();
         pickup.Initialize(this, match, kind);

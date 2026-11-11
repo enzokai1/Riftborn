@@ -1,0 +1,629 @@
+{
+ "tile": 16,
+ "assets": {
+  "house/floor-overlays/clean/floor-horror-32.png": {
+   "sheet": "16x16/sheets/house-floor-overlays-clean.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/floor-overlays/clean/floor-horror-32.png"
+  },
+  "house/floor-overlays/decayed/floor-horror-28.png": {
+   "sheet": "16x16/sheets/house-floor-overlays-decayed.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/floor-overlays/decayed/floor-horror-28.png"
+  },
+  "house/floor-overlays/horror/floor-horror-01.png": {
+   "sheet": "16x16/sheets/house-floor-overlays-horror.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/floor-overlays/horror/floor-horror-01.png"
+  },
+  "house/furniture/beds/clean/bed-15.png": {
+   "sheet": "16x16/sheets/house-furniture-beds-clean.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/beds/clean/bed-15.png"
+  },
+  "house/furniture/beds/decayed/bed-13.png": {
+   "sheet": "16x16/sheets/house-furniture-beds-decayed.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/beds/decayed/bed-13.png"
+  },
+  "house/furniture/beds/horror/bed-01.png": {
+   "sheet": "16x16/sheets/house-furniture-beds-horror.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/beds/horror/bed-01.png"
+  },
+  "house/furniture/candelabras/clean/candelabra-01.png": {
+   "sheet": "16x16/sheets/house-furniture-candelabras-clean.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/candelabras/clean/candelabra-01.png"
+  },
+  "house/furniture/candelabras/decayed/candelabra-04.png": {
+   "sheet": "16x16/sheets/house-furniture-candelabras-decayed.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/candelabras/decayed/candelabra-04.png"
+  },
+  "house/furniture/candelabras/horror/candelabra-02.png": {
+   "sheet": "16x16/sheets/house-furniture-candelabras-horror.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/candelabras/horror/candelabra-02.png"
+  },
+  "house/furniture/dining-chairs/clean/dining-chair-29.png": {
+   "sheet": "16x16/sheets/house-furniture-dining-chairs-clean.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/dining-chairs/clean/dining-chair-29.png"
+  },
+  "house/furniture/dining-chairs/decayed/dining-chair-24.png": {
+   "sheet": "16x16/sheets/house-furniture-dining-chairs-decayed.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/dining-chairs/decayed/dining-chair-24.png"
+  },
+  "house/furniture/dining-chairs/horror/dining-chair-01.png": {
+   "sheet": "16x16/sheets/house-furniture-dining-chairs-horror.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/dining-chairs/horror/dining-chair-01.png"
+  },
+  "house/furniture/dining-tables/clean/dining-table-29.png": {
+   "sheet": "16x16/sheets/house-furniture-dining-tables-clean.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/dining-tables/clean/dining-table-29.png"
+  },
+  "house/furniture/dining-tables/decayed/dining-table-25.png": {
+   "sheet": "16x16/sheets/house-furniture-dining-tables-decayed.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/dining-tables/decayed/dining-table-25.png"
+  },
+  "house/furniture/dining-tables/horror/dining-table-01.png": {
+   "sheet": "16x16/sheets/house-furniture-dining-tables-horror.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/dining-tables/horror/dining-table-01.png"
+  },
+  "house/furniture/fireplaces/clean/fireplace-31.png": {
+   "sheet": "16x16/sheets/house-furniture-fireplaces-clean.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/fireplaces/clean/fireplace-31.png"
+  },
+  "house/furniture/fireplaces/decayed/fireplace-29.png": {
+   "sheet": "16x16/sheets/house-furniture-fireplaces-decayed.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/fireplaces/decayed/fireplace-29.png"
+  },
+  "house/furniture/fireplaces/horror/fireplace-01.png": {
+   "sheet": "16x16/sheets/house-furniture-fireplaces-horror.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/fireplaces/horror/fireplace-01.png"
+  },
+  "house/furniture/grandfather-clocks/clean/grandfather-clock-17.png": {
+   "sheet": "16x16/sheets/house-furniture-grandfather-clocks-clean.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 48,
+   "file": "16x16/house/furniture/grandfather-clocks/clean/grandfather-clock-17.png"
+  },
+  "house/furniture/grandfather-clocks/decayed/grandfather-clock-13.png": {
+   "sheet": "16x16/sheets/house-furniture-grandfather-clocks-decayed.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 48,
+   "file": "16x16/house/furniture/grandfather-clocks/decayed/grandfather-clock-13.png"
+  },
+  "house/furniture/grandfather-clocks/horror/grandfather-clock-01.png": {
+   "sheet": "16x16/sheets/house-furniture-grandfather-clocks-horror.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 48,
+   "file": "16x16/house/furniture/grandfather-clocks/horror/grandfather-clock-01.png"
+  },
+  "house/furniture/seating/clean/seating-16.png": {
+   "sheet": "16x16/sheets/house-furniture-seating-clean.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/seating/clean/seating-16.png"
+  },
+  "house/furniture/seating/decayed/seating-13.png": {
+   "sheet": "16x16/sheets/house-furniture-seating-decayed.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/seating/decayed/seating-13.png"
+  },
+  "house/furniture/seating/horror/seating-01.png": {
+   "sheet": "16x16/sheets/house-furniture-seating-horror.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/seating/horror/seating-01.png"
+  },
+  "house/furniture/wardrobes-vanities/clean/wardrobe-vanity-16.png": {
+   "sheet": "16x16/sheets/house-furniture-wardrobes-vanities-clean.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/wardrobes-vanities/clean/wardrobe-vanity-16.png"
+  },
+  "house/furniture/wardrobes-vanities/decayed/wardrobe-vanity-14.png": {
+   "sheet": "16x16/sheets/house-furniture-wardrobes-vanities-decayed.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/wardrobes-vanities/decayed/wardrobe-vanity-14.png"
+  },
+  "house/furniture/wardrobes-vanities/horror/wardrobe-vanity-01.png": {
+   "sheet": "16x16/sheets/house-furniture-wardrobes-vanities-horror.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/furniture/wardrobes-vanities/horror/wardrobe-vanity-01.png"
+  },
+  "house/halloween/halloween-decor/clean/halloween-decor-29.png": {
+   "sheet": "16x16/sheets/house-halloween-halloween-decor-clean.png",
+   "x": 0,
+   "y": 0,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/house/halloween/halloween-decor/clean/halloween-decor-29.png"
+  },
+  "house/halloween/halloween-decor/decayed/halloween-decor-30.png": {
+   "sheet": "16x16/sheets/house-halloween-halloween-decor-decayed.png",
+   "x": 0,
+   "y": 0,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/house/halloween/halloween-decor/decayed/halloween-decor-30.png"
+  },
+  "house/halloween/halloween-decor/horror/halloween-decor-01.png": {
+   "sheet": "16x16/sheets/house-halloween-halloween-decor-horror.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/halloween/halloween-decor/horror/halloween-decor-01.png"
+  },
+  "house/halloween/jack-o-lanterns/clean/jack-o-lantern-30.png": {
+   "sheet": "16x16/sheets/house-halloween-jack-o-lanterns-clean.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/halloween/jack-o-lanterns/clean/jack-o-lantern-30.png"
+  },
+  "house/halloween/jack-o-lanterns/horror/jack-o-lantern-01.png": {
+   "sheet": "16x16/sheets/house-halloween-jack-o-lanterns-horror.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/halloween/jack-o-lanterns/horror/jack-o-lantern-01.png"
+  },
+  "house/halloween/tabletop-decor/clean/tabletop-decor-29.png": {
+   "sheet": "16x16/sheets/house-halloween-tabletop-decor-clean.png",
+   "x": 0,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/house/halloween/tabletop-decor/clean/tabletop-decor-29.png"
+  },
+  "house/halloween/tabletop-decor/decayed/tabletop-decor-32.png": {
+   "sheet": "16x16/sheets/house-halloween-tabletop-decor-decayed.png",
+   "x": 0,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/house/halloween/tabletop-decor/decayed/tabletop-decor-32.png"
+  },
+  "house/halloween/tabletop-decor/horror/tabletop-decor-01.png": {
+   "sheet": "16x16/sheets/house-halloween-tabletop-decor-horror.png",
+   "x": 0,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/house/halloween/tabletop-decor/horror/tabletop-decor-01.png"
+  },
+  "house/wall-overlays/clean/wall-horror-32.png": {
+   "sheet": "16x16/sheets/house-wall-overlays-clean.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/wall-overlays/clean/wall-horror-32.png"
+  },
+  "house/wall-overlays/decayed/wall-horror-28.png": {
+   "sheet": "16x16/sheets/house-wall-overlays-decayed.png",
+   "x": 0,
+   "y": 0,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/house/wall-overlays/decayed/wall-horror-28.png"
+  },
+  "house/wall-overlays/horror/wall-horror-01.png": {
+   "sheet": "16x16/sheets/house-wall-overlays-horror.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/wall-overlays/horror/wall-horror-01.png"
+  },
+  "house/wall-props/doors/clean/door-30.png": {
+   "sheet": "16x16/sheets/house-wall-props-doors-clean.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/wall-props/doors/clean/door-30.png"
+  },
+  "house/wall-props/doors/decayed/door-27.png": {
+   "sheet": "16x16/sheets/house-wall-props-doors-decayed.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/wall-props/doors/decayed/door-27.png"
+  },
+  "house/wall-props/doors/horror/door-01.png": {
+   "sheet": "16x16/sheets/house-wall-props-doors-horror.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/house/wall-props/doors/horror/door-01.png"
+  },
+  "house/wall-props/windows/clean/window-16.png": {
+   "sheet": "16x16/sheets/house-wall-props-windows-clean.png",
+   "x": 0,
+   "y": 0,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/house/wall-props/windows/clean/window-16.png"
+  },
+  "house/wall-props/windows/decayed/window-06.png": {
+   "sheet": "16x16/sheets/house-wall-props-windows-decayed.png",
+   "x": 0,
+   "y": 0,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/house/wall-props/windows/decayed/window-06.png"
+  },
+  "house/wall-props/windows/horror/window-01.png": {
+   "sheet": "16x16/sheets/house-wall-props-windows-horror.png",
+   "x": 0,
+   "y": 0,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/house/wall-props/windows/horror/window-01.png"
+  },
+  "room-builder/band/bone/band_bottom.png": {
+   "sheet": "16x16/sheets/room-builder-band-bone.png",
+   "x": 0,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/room-builder/band/bone/band_bottom.png"
+  },
+  "room-builder/band/bone/corner_bottom_left.png": {
+   "sheet": "16x16/sheets/room-builder-band-bone.png",
+   "x": 16,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/room-builder/band/bone/corner_bottom_left.png"
+  },
+  "room-builder/band/bone/corner_bottom_right.png": {
+   "sheet": "16x16/sheets/room-builder-band-bone.png",
+   "x": 32,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/room-builder/band/bone/corner_bottom_right.png"
+  },
+  "room-builder/band/bone/partition_bottom.png": {
+   "sheet": "16x16/sheets/room-builder-band-bone.png",
+   "x": 48,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/room-builder/band/bone/partition_bottom.png"
+  },
+  "room-builder/band/bone/void.png": {
+   "sheet": "16x16/sheets/room-builder-band-bone.png",
+   "x": 64,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/room-builder/band/bone/void.png"
+  },
+  "room-builder/doormats/doormat-01.png": {
+   "sheet": "16x16/sheets/room-builder-doormats.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 16,
+   "file": "16x16/room-builder/doormats/doormat-01.png"
+  },
+  "room-builder/floors/hardwood/floor.png": {
+   "sheet": "16x16/sheets/room-builder-floors-hardwood.png",
+   "x": 0,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/room-builder/floors/hardwood/floor.png"
+  },
+  "room-builder/floors/hardwood/floor_alt.png": {
+   "sheet": "16x16/sheets/room-builder-floors-hardwood.png",
+   "x": 16,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/room-builder/floors/hardwood/floor_alt.png"
+  },
+  "room-builder/floors/hardwood/floor_damaged.png": {
+   "sheet": "16x16/sheets/room-builder-floors-hardwood.png",
+   "x": 32,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/room-builder/floors/hardwood/floor_damaged.png"
+  },
+  "room-builder/floors/hardwood/floor_shadow.png": {
+   "sheet": "16x16/sheets/room-builder-floors-hardwood.png",
+   "x": 48,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/room-builder/floors/hardwood/floor_shadow.png"
+  },
+  "room-builder/stairs/manor/stairs_down.png": {
+   "sheet": "16x16/sheets/room-builder-stairs-manor.png",
+   "x": 0,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/room-builder/stairs/manor/stairs_down.png"
+  },
+  "room-builder/stairs/manor/stairs_down_horror.png": {
+   "sheet": "16x16/sheets/room-builder-stairs-manor.png",
+   "x": 32,
+   "y": 0,
+   "w": 32,
+   "h": 32,
+   "file": "16x16/room-builder/stairs/manor/stairs_down_horror.png"
+  },
+  "room-builder/stairs/manor/stairs_up.png": {
+   "sheet": "16x16/sheets/room-builder-stairs-manor.png",
+   "x": 64,
+   "y": 0,
+   "w": 32,
+   "h": 64,
+   "file": "16x16/room-builder/stairs/manor/stairs_up.png"
+  },
+  "room-builder/stairs/manor/stairs_up_horror.png": {
+   "sheet": "16x16/sheets/room-builder-stairs-manor.png",
+   "x": 96,
+   "y": 0,
+   "w": 32,
+   "h": 64,
+   "file": "16x16/room-builder/stairs/manor/stairs_up_horror.png"
+  },
+  "room-builder/walls/floral/corner_left.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 0,
+   "y": 0,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/room-builder/walls/floral/corner_left.png"
+  },
+  "room-builder/walls/floral/corner_right.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 16,
+   "y": 0,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/room-builder/walls/floral/corner_right.png"
+  },
+  "room-builder/walls/floral/doorway_left.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 32,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/room-builder/walls/floral/doorway_left.png"
+  },
+  "room-builder/walls/floral/doorway_right.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 48,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/room-builder/walls/floral/doorway_right.png"
+  },
+  "room-builder/walls/floral/partition.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 64,
+   "y": 0,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/room-builder/walls/floral/partition.png"
+  },
+  "room-builder/walls/floral/partition_door_left.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 80,
+   "y": 0,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/room-builder/walls/floral/partition_door_left.png"
+  },
+  "room-builder/walls/floral/partition_door_right.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 96,
+   "y": 0,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/room-builder/walls/floral/partition_door_right.png"
+  },
+  "room-builder/walls/floral/partition_end_bottom.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 112,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/room-builder/walls/floral/partition_end_bottom.png"
+  },
+  "room-builder/walls/floral/partition_end_top.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 128,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/room-builder/walls/floral/partition_end_top.png"
+  },
+  "room-builder/walls/floral/side_left.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 144,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/room-builder/walls/floral/side_left.png"
+  },
+  "room-builder/walls/floral/side_partition.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 160,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/room-builder/walls/floral/side_partition.png"
+  },
+  "room-builder/walls/floral/side_right.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 176,
+   "y": 0,
+   "w": 16,
+   "h": 16,
+   "file": "16x16/room-builder/walls/floral/side_right.png"
+  },
+  "room-builder/walls/floral/wall.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 192,
+   "y": 0,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/room-builder/walls/floral/wall.png"
+  },
+  "room-builder/walls/floral/wall_cracked.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 208,
+   "y": 0,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/room-builder/walls/floral/wall_cracked.png"
+  },
+  "room-builder/walls/floral/wall_damaged.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 224,
+   "y": 0,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/room-builder/walls/floral/wall_damaged.png"
+  },
+  "room-builder/walls/floral/wall_end_left.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 240,
+   "y": 0,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/room-builder/walls/floral/wall_end_left.png"
+  },
+  "room-builder/walls/floral/wall_end_right.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 0,
+   "y": 32,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/room-builder/walls/floral/wall_end_right.png"
+  },
+  "room-builder/walls/floral/wall_holed.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 16,
+   "y": 32,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/room-builder/walls/floral/wall_holed.png"
+  },
+  "room-builder/walls/floral/wall_mouldy.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 32,
+   "y": 32,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/room-builder/walls/floral/wall_mouldy.png"
+  },
+  "room-builder/walls/floral/wall_stained.png": {
+   "sheet": "16x16/sheets/room-builder-walls-floral.png",
+   "x": 48,
+   "y": 32,
+   "w": 16,
+   "h": 32,
+   "file": "16x16/room-builder/walls/floral/wall_stained.png"
+  }
+ }
+}

@@ -1,0 +1,11 @@
+Fragment crystal sprites
+
+Source: user-supplied "Arcade - Magical Crystals - Miscellaneous - Items & Effects.png".
+The source sheet attributes the artwork to Kaneko, Magical Crystals (1991).
+No redistribution or commercial-use license has been verified; prototype artwork.
+
+Crystal00 through Crystal08 follow the source's large crystals left-to-right,
+top row then bottom row. Each frame occupies a centered 64x64 transparent cell.
+Only the solid sheet background was removed; original crystal pixels are preserved.
+Imported at 48 pixels per unit, point filtering, no mipmaps or compression.
+Runtime animation: Assets/Scripts/Progression/FragmentVisual.cs.

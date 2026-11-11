@@ -1,0 +1,884 @@
+[gd_resource type="TileSet" load_steps=101 format=3]
+
+[ext_resource type="Texture2D" path="../16x16/sheets/house-floor-overlays-clean.png" id="1_house_floor_overlays_clean"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-floor-overlays-decayed.png" id="2_house_floor_overlays_decayed"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-floor-overlays-horror.png" id="3_house_floor_overlays_horror"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-beds-clean.png" id="4_house_furniture_beds_clean"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-beds-decayed.png" id="5_house_furniture_beds_decayed"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-beds-horror.png" id="6_house_furniture_beds_horror"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-candelabras-clean.png" id="7_house_furniture_candelabras_clean"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-candelabras-decayed.png" id="8_house_furniture_candelabras_decayed"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-candelabras-horror.png" id="9_house_furniture_candelabras_horror"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-dining-chairs-clean.png" id="10_house_furniture_dining_chairs_clean"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-dining-chairs-decayed.png" id="11_house_furniture_dining_chairs_decayed"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-dining-chairs-horror.png" id="12_house_furniture_dining_chairs_horror"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-dining-tables-clean.png" id="13_house_furniture_dining_tables_clean"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-dining-tables-decayed.png" id="14_house_furniture_dining_tables_decayed"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-dining-tables-horror.png" id="15_house_furniture_dining_tables_horror"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-fireplaces-clean.png" id="16_house_furniture_fireplaces_clean"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-fireplaces-decayed.png" id="17_house_furniture_fireplaces_decayed"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-fireplaces-horror.png" id="18_house_furniture_fireplaces_horror"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-grandfather-clocks-clean.png" id="19_house_furniture_grandfather_clocks_clean"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-grandfather-clocks-decayed.png" id="20_house_furniture_grandfather_clocks_decayed"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-grandfather-clocks-horror.png" id="21_house_furniture_grandfather_clocks_horror"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-seating-clean.png" id="22_house_furniture_seating_clean"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-seating-decayed.png" id="23_house_furniture_seating_decayed"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-seating-horror.png" id="24_house_furniture_seating_horror"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-wardrobes-vanities-clean.png" id="25_house_furniture_wardrobes_vanities_clean"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-wardrobes-vanities-decayed.png" id="26_house_furniture_wardrobes_vanities_decayed"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-furniture-wardrobes-vanities-horror.png" id="27_house_furniture_wardrobes_vanities_horror"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-halloween-halloween-decor-clean.png" id="28_house_halloween_halloween_decor_clean"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-halloween-halloween-decor-decayed.png" id="29_house_halloween_halloween_decor_decayed"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-halloween-halloween-decor-horror.png" id="30_house_halloween_halloween_decor_horror"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-halloween-jack-o-lanterns-clean.png" id="31_house_halloween_jack_o_lanterns_clean"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-halloween-jack-o-lanterns-horror.png" id="32_house_halloween_jack_o_lanterns_horror"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-halloween-tabletop-decor-clean.png" id="33_house_halloween_tabletop_decor_clean"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-halloween-tabletop-decor-decayed.png" id="34_house_halloween_tabletop_decor_decayed"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-halloween-tabletop-decor-horror.png" id="35_house_halloween_tabletop_decor_horror"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-wall-overlays-clean.png" id="36_house_wall_overlays_clean"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-wall-overlays-decayed.png" id="37_house_wall_overlays_decayed"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-wall-overlays-horror.png" id="38_house_wall_overlays_horror"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-wall-props-doors-clean.png" id="39_house_wall_props_doors_clean"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-wall-props-doors-decayed.png" id="40_house_wall_props_doors_decayed"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-wall-props-doors-horror.png" id="41_house_wall_props_doors_horror"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-wall-props-windows-clean.png" id="42_house_wall_props_windows_clean"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-wall-props-windows-decayed.png" id="43_house_wall_props_windows_decayed"]
+[ext_resource type="Texture2D" path="../16x16/sheets/house-wall-props-windows-horror.png" id="44_house_wall_props_windows_horror"]
+[ext_resource type="Texture2D" path="../16x16/sheets/room-builder-band-bone.png" id="45_room_builder_band_bone"]
+[ext_resource type="Texture2D" path="../16x16/sheets/room-builder-doormats.png" id="46_room_builder_doormats"]
+[ext_resource type="Texture2D" path="../16x16/sheets/room-builder-floors-hardwood.png" id="47_room_builder_floors_hardwood"]
+[ext_resource type="Texture2D" path="../16x16/sheets/room-builder-stairs-manor.png" id="48_room_builder_stairs_manor"]
+[ext_resource type="Texture2D" path="../16x16/sheets/room-builder-walls-floral.png" id="49_room_builder_walls_floral"]
+[ext_resource type="Texture2D" path="../16x16/sheets/border-autotile.png" id="50_border_autotile"]
+
+[sub_resource type="TileSetAtlasSource" id="src_house_floor_overlays_clean"]
+resource_name = "house-floor-overlays-clean"
+texture = ExtResource("1_house_floor_overlays_clean")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_floor_overlays_decayed"]
+resource_name = "house-floor-overlays-decayed"
+texture = ExtResource("2_house_floor_overlays_decayed")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_floor_overlays_horror"]
+resource_name = "house-floor-overlays-horror"
+texture = ExtResource("3_house_floor_overlays_horror")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_beds_clean"]
+resource_name = "house-furniture-beds-clean"
+texture = ExtResource("4_house_furniture_beds_clean")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_beds_decayed"]
+resource_name = "house-furniture-beds-decayed"
+texture = ExtResource("5_house_furniture_beds_decayed")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_beds_horror"]
+resource_name = "house-furniture-beds-horror"
+texture = ExtResource("6_house_furniture_beds_horror")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_candelabras_clean"]
+resource_name = "house-furniture-candelabras-clean"
+texture = ExtResource("7_house_furniture_candelabras_clean")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_candelabras_decayed"]
+resource_name = "house-furniture-candelabras-decayed"
+texture = ExtResource("8_house_furniture_candelabras_decayed")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_candelabras_horror"]
+resource_name = "house-furniture-candelabras-horror"
+texture = ExtResource("9_house_furniture_candelabras_horror")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_dining_chairs_clean"]
+resource_name = "house-furniture-dining-chairs-clean"
+texture = ExtResource("10_house_furniture_dining_chairs_clean")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_dining_chairs_decayed"]
+resource_name = "house-furniture-dining-chairs-decayed"
+texture = ExtResource("11_house_furniture_dining_chairs_decayed")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_dining_chairs_horror"]
+resource_name = "house-furniture-dining-chairs-horror"
+texture = ExtResource("12_house_furniture_dining_chairs_horror")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_dining_tables_clean"]
+resource_name = "house-furniture-dining-tables-clean"
+texture = ExtResource("13_house_furniture_dining_tables_clean")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_dining_tables_decayed"]
+resource_name = "house-furniture-dining-tables-decayed"
+texture = ExtResource("14_house_furniture_dining_tables_decayed")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_dining_tables_horror"]
+resource_name = "house-furniture-dining-tables-horror"
+texture = ExtResource("15_house_furniture_dining_tables_horror")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_fireplaces_clean"]
+resource_name = "house-furniture-fireplaces-clean"
+texture = ExtResource("16_house_furniture_fireplaces_clean")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_fireplaces_decayed"]
+resource_name = "house-furniture-fireplaces-decayed"
+texture = ExtResource("17_house_furniture_fireplaces_decayed")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_fireplaces_horror"]
+resource_name = "house-furniture-fireplaces-horror"
+texture = ExtResource("18_house_furniture_fireplaces_horror")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_grandfather_clocks_clean"]
+resource_name = "house-furniture-grandfather-clocks-clean"
+texture = ExtResource("19_house_furniture_grandfather_clocks_clean")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 3)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -16)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_grandfather_clocks_decayed"]
+resource_name = "house-furniture-grandfather-clocks-decayed"
+texture = ExtResource("20_house_furniture_grandfather_clocks_decayed")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 3)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -16)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_grandfather_clocks_horror"]
+resource_name = "house-furniture-grandfather-clocks-horror"
+texture = ExtResource("21_house_furniture_grandfather_clocks_horror")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 3)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -16)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_seating_clean"]
+resource_name = "house-furniture-seating-clean"
+texture = ExtResource("22_house_furniture_seating_clean")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_seating_decayed"]
+resource_name = "house-furniture-seating-decayed"
+texture = ExtResource("23_house_furniture_seating_decayed")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_seating_horror"]
+resource_name = "house-furniture-seating-horror"
+texture = ExtResource("24_house_furniture_seating_horror")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_wardrobes_vanities_clean"]
+resource_name = "house-furniture-wardrobes-vanities-clean"
+texture = ExtResource("25_house_furniture_wardrobes_vanities_clean")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_wardrobes_vanities_decayed"]
+resource_name = "house-furniture-wardrobes-vanities-decayed"
+texture = ExtResource("26_house_furniture_wardrobes_vanities_decayed")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_furniture_wardrobes_vanities_horror"]
+resource_name = "house-furniture-wardrobes-vanities-horror"
+texture = ExtResource("27_house_furniture_wardrobes_vanities_horror")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_halloween_halloween_decor_clean"]
+resource_name = "house-halloween-halloween-decor-clean"
+texture = ExtResource("28_house_halloween_halloween_decor_clean")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(1, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_halloween_halloween_decor_decayed"]
+resource_name = "house-halloween-halloween-decor-decayed"
+texture = ExtResource("29_house_halloween_halloween_decor_decayed")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(1, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_halloween_halloween_decor_horror"]
+resource_name = "house-halloween-halloween-decor-horror"
+texture = ExtResource("30_house_halloween_halloween_decor_horror")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_halloween_jack_o_lanterns_clean"]
+resource_name = "house-halloween-jack-o-lanterns-clean"
+texture = ExtResource("31_house_halloween_jack_o_lanterns_clean")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_halloween_jack_o_lanterns_horror"]
+resource_name = "house-halloween-jack-o-lanterns-horror"
+texture = ExtResource("32_house_halloween_jack_o_lanterns_horror")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_halloween_tabletop_decor_clean"]
+resource_name = "house-halloween-tabletop-decor-clean"
+texture = ExtResource("33_house_halloween_tabletop_decor_clean")
+texture_region_size = Vector2i(16, 16)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="src_house_halloween_tabletop_decor_decayed"]
+resource_name = "house-halloween-tabletop-decor-decayed"
+texture = ExtResource("34_house_halloween_tabletop_decor_decayed")
+texture_region_size = Vector2i(16, 16)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="src_house_halloween_tabletop_decor_horror"]
+resource_name = "house-halloween-tabletop-decor-horror"
+texture = ExtResource("35_house_halloween_tabletop_decor_horror")
+texture_region_size = Vector2i(16, 16)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="src_house_wall_overlays_clean"]
+resource_name = "house-wall-overlays-clean"
+texture = ExtResource("36_house_wall_overlays_clean")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_wall_overlays_decayed"]
+resource_name = "house-wall-overlays-decayed"
+texture = ExtResource("37_house_wall_overlays_decayed")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(1, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_wall_overlays_horror"]
+resource_name = "house-wall-overlays-horror"
+texture = ExtResource("38_house_wall_overlays_horror")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_wall_props_doors_clean"]
+resource_name = "house-wall-props-doors-clean"
+texture = ExtResource("39_house_wall_props_doors_clean")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_wall_props_doors_decayed"]
+resource_name = "house-wall-props-doors-decayed"
+texture = ExtResource("40_house_wall_props_doors_decayed")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_wall_props_doors_horror"]
+resource_name = "house-wall-props-doors-horror"
+texture = ExtResource("41_house_wall_props_doors_horror")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_wall_props_windows_clean"]
+resource_name = "house-wall-props-windows-clean"
+texture = ExtResource("42_house_wall_props_windows_clean")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(1, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_wall_props_windows_decayed"]
+resource_name = "house-wall-props-windows-decayed"
+texture = ExtResource("43_house_wall_props_windows_decayed")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(1, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_house_wall_props_windows_horror"]
+resource_name = "house-wall-props-windows-horror"
+texture = ExtResource("44_house_wall_props_windows_horror")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(1, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_room_builder_band_bone"]
+resource_name = "room-builder-band-bone"
+texture = ExtResource("45_room_builder_band_bone")
+texture_region_size = Vector2i(16, 16)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="src_room_builder_doormats"]
+resource_name = "room-builder-doormats"
+texture = ExtResource("46_room_builder_doormats")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 1)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, 0)
+
+[sub_resource type="TileSetAtlasSource" id="src_room_builder_floors_hardwood"]
+resource_name = "room-builder-floors-hardwood"
+texture = ExtResource("47_room_builder_floors_hardwood")
+texture_region_size = Vector2i(16, 16)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="src_room_builder_stairs_manor"]
+resource_name = "room-builder-stairs-manor"
+texture = ExtResource("48_room_builder_stairs_manor")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-8, -8)
+2:0/size_in_atlas = Vector2i(2, 2)
+2:0/0 = 0
+2:0/0/texture_origin = Vector2i(-8, -8)
+4:0/size_in_atlas = Vector2i(2, 4)
+4:0/0 = 0
+4:0/0/texture_origin = Vector2i(-8, -24)
+6:0/size_in_atlas = Vector2i(2, 4)
+6:0/0 = 0
+6:0/0/texture_origin = Vector2i(-8, -24)
+
+[sub_resource type="TileSetAtlasSource" id="src_room_builder_walls_floral"]
+resource_name = "room-builder-walls-floral"
+texture = ExtResource("49_room_builder_walls_floral")
+texture_region_size = Vector2i(16, 16)
+0:0/size_in_atlas = Vector2i(1, 2)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -8)
+1:0/size_in_atlas = Vector2i(1, 2)
+1:0/0 = 0
+1:0/0/texture_origin = Vector2i(0, -8)
+2:0/0 = 0
+3:0/0 = 0
+4:0/size_in_atlas = Vector2i(1, 2)
+4:0/0 = 0
+4:0/0/texture_origin = Vector2i(0, -8)
+5:0/size_in_atlas = Vector2i(1, 2)
+5:0/0 = 0
+5:0/0/texture_origin = Vector2i(0, -8)
+6:0/size_in_atlas = Vector2i(1, 2)
+6:0/0 = 0
+6:0/0/texture_origin = Vector2i(0, -8)
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+10:0/0 = 0
+11:0/0 = 0
+12:0/size_in_atlas = Vector2i(1, 2)
+12:0/0 = 0
+12:0/0/texture_origin = Vector2i(0, -8)
+13:0/size_in_atlas = Vector2i(1, 2)
+13:0/0 = 0
+13:0/0/texture_origin = Vector2i(0, -8)
+14:0/size_in_atlas = Vector2i(1, 2)
+14:0/0 = 0
+14:0/0/texture_origin = Vector2i(0, -8)
+15:0/size_in_atlas = Vector2i(1, 2)
+15:0/0 = 0
+15:0/0/texture_origin = Vector2i(0, -8)
+0:2/size_in_atlas = Vector2i(1, 2)
+0:2/0 = 0
+0:2/0/texture_origin = Vector2i(0, -8)
+1:2/size_in_atlas = Vector2i(1, 2)
+1:2/0 = 0
+1:2/0/texture_origin = Vector2i(0, -8)
+2:2/size_in_atlas = Vector2i(1, 2)
+2:2/0 = 0
+2:2/0/texture_origin = Vector2i(0, -8)
+3:2/size_in_atlas = Vector2i(1, 2)
+3:2/0 = 0
+3:2/0/texture_origin = Vector2i(0, -8)
+
+[sub_resource type="TileSetAtlasSource" id="src_border_autotile"]
+resource_name = "border-autotile"
+texture = ExtResource("50_border_autotile")
+texture_region_size = Vector2i(16, 16)
+0:0/0 = 0
+0:0/0/terrain_set = 0
+0:0/0/terrain = 0
+1:0/0 = 0
+1:0/0/terrain_set = 0
+1:0/0/terrain = 0
+1:0/0/terrains_peering_bit/top_side = 0
+2:0/0 = 0
+2:0/0/terrain_set = 0
+2:0/0/terrain = 0
+2:0/0/terrains_peering_bit/right_side = 0
+3:0/0 = 0
+3:0/0/terrain_set = 0
+3:0/0/terrain = 0
+3:0/0/terrains_peering_bit/top_side = 0
+3:0/0/terrains_peering_bit/right_side = 0
+4:0/0 = 0
+4:0/0/terrain_set = 0
+4:0/0/terrain = 0
+4:0/0/terrains_peering_bit/top_side = 0
+4:0/0/terrains_peering_bit/top_right_corner = 0
+4:0/0/terrains_peering_bit/right_side = 0
+5:0/0 = 0
+5:0/0/terrain_set = 0
+5:0/0/terrain = 0
+5:0/0/terrains_peering_bit/bottom_side = 0
+6:0/0 = 0
+6:0/0/terrain_set = 0
+6:0/0/terrain = 0
+6:0/0/terrains_peering_bit/top_side = 0
+6:0/0/terrains_peering_bit/bottom_side = 0
+7:0/0 = 0
+7:0/0/terrain_set = 0
+7:0/0/terrain = 0
+7:0/0/terrains_peering_bit/right_side = 0
+7:0/0/terrains_peering_bit/bottom_side = 0
+8:0/0 = 0
+8:0/0/terrain_set = 0
+8:0/0/terrain = 0
+8:0/0/terrains_peering_bit/top_side = 0
+8:0/0/terrains_peering_bit/right_side = 0
+8:0/0/terrains_peering_bit/bottom_side = 0
+9:0/0 = 0
+9:0/0/terrain_set = 0
+9:0/0/terrain = 0
+9:0/0/terrains_peering_bit/top_side = 0
+9:0/0/terrains_peering_bit/top_right_corner = 0
+9:0/0/terrains_peering_bit/right_side = 0
+9:0/0/terrains_peering_bit/bottom_side = 0
+10:0/0 = 0
+10:0/0/terrain_set = 0
+10:0/0/terrain = 0
+10:0/0/terrains_peering_bit/right_side = 0
+10:0/0/terrains_peering_bit/bottom_right_corner = 0
+10:0/0/terrains_peering_bit/bottom_side = 0
+11:0/0 = 0
+11:0/0/terrain_set = 0
+11:0/0/terrain = 0
+11:0/0/terrains_peering_bit/top_side = 0
+11:0/0/terrains_peering_bit/right_side = 0
+11:0/0/terrains_peering_bit/bottom_right_corner = 0
+11:0/0/terrains_peering_bit/bottom_side = 0
+12:0/0 = 0
+12:0/0/terrain_set = 0
+12:0/0/terrain = 0
+12:0/0/terrains_peering_bit/top_side = 0
+12:0/0/terrains_peering_bit/top_right_corner = 0
+12:0/0/terrains_peering_bit/right_side = 0
+12:0/0/terrains_peering_bit/bottom_right_corner = 0
+12:0/0/terrains_peering_bit/bottom_side = 0
+13:0/0 = 0
+13:0/0/terrain_set = 0
+13:0/0/terrain = 0
+13:0/0/terrains_peering_bit/left_side = 0
+14:0/0 = 0
+14:0/0/terrain_set = 0
+14:0/0/terrain = 0
+14:0/0/terrains_peering_bit/top_side = 0
+14:0/0/terrains_peering_bit/left_side = 0
+15:0/0 = 0
+15:0/0/terrain_set = 0
+15:0/0/terrain = 0
+15:0/0/terrains_peering_bit/right_side = 0
+15:0/0/terrains_peering_bit/left_side = 0
+0:1/0 = 0
+0:1/0/terrain_set = 0
+0:1/0/terrain = 0
+0:1/0/terrains_peering_bit/top_side = 0
+0:1/0/terrains_peering_bit/right_side = 0
+0:1/0/terrains_peering_bit/left_side = 0
+1:1/0 = 0
+1:1/0/terrain_set = 0
+1:1/0/terrain = 0
+1:1/0/terrains_peering_bit/top_side = 0
+1:1/0/terrains_peering_bit/top_right_corner = 0
+1:1/0/terrains_peering_bit/right_side = 0
+1:1/0/terrains_peering_bit/left_side = 0
+2:1/0 = 0
+2:1/0/terrain_set = 0
+2:1/0/terrain = 0
+2:1/0/terrains_peering_bit/bottom_side = 0
+2:1/0/terrains_peering_bit/left_side = 0
+3:1/0 = 0
+3:1/0/terrain_set = 0
+3:1/0/terrain = 0
+3:1/0/terrains_peering_bit/top_side = 0
+3:1/0/terrains_peering_bit/bottom_side = 0
+3:1/0/terrains_peering_bit/left_side = 0
+4:1/0 = 0
+4:1/0/terrain_set = 0
+4:1/0/terrain = 0
+4:1/0/terrains_peering_bit/right_side = 0
+4:1/0/terrains_peering_bit/bottom_side = 0
+4:1/0/terrains_peering_bit/left_side = 0
+5:1/0 = 0
+5:1/0/terrain_set = 0
+5:1/0/terrain = 0
+5:1/0/terrains_peering_bit/top_side = 0
+5:1/0/terrains_peering_bit/right_side = 0
+5:1/0/terrains_peering_bit/bottom_side = 0
+5:1/0/terrains_peering_bit/left_side = 0
+6:1/0 = 0
+6:1/0/terrain_set = 0
+6:1/0/terrain = 0
+6:1/0/terrains_peering_bit/top_side = 0
+6:1/0/terrains_peering_bit/top_right_corner = 0
+6:1/0/terrains_peering_bit/right_side = 0
+6:1/0/terrains_peering_bit/bottom_side = 0
+6:1/0/terrains_peering_bit/left_side = 0
+7:1/0 = 0
+7:1/0/terrain_set = 0
+7:1/0/terrain = 0
+7:1/0/terrains_peering_bit/right_side = 0
+7:1/0/terrains_peering_bit/bottom_right_corner = 0
+7:1/0/terrains_peering_bit/bottom_side = 0
+7:1/0/terrains_peering_bit/left_side = 0
+8:1/0 = 0
+8:1/0/terrain_set = 0
+8:1/0/terrain = 0
+8:1/0/terrains_peering_bit/top_side = 0
+8:1/0/terrains_peering_bit/right_side = 0
+8:1/0/terrains_peering_bit/bottom_right_corner = 0
+8:1/0/terrains_peering_bit/bottom_side = 0
+8:1/0/terrains_peering_bit/left_side = 0
+9:1/0 = 0
+9:1/0/terrain_set = 0
+9:1/0/terrain = 0
+9:1/0/terrains_peering_bit/top_side = 0
+9:1/0/terrains_peering_bit/top_right_corner = 0
+9:1/0/terrains_peering_bit/right_side = 0
+9:1/0/terrains_peering_bit/bottom_right_corner = 0
+9:1/0/terrains_peering_bit/bottom_side = 0
+9:1/0/terrains_peering_bit/left_side = 0
+10:1/0 = 0
+10:1/0/terrain_set = 0
+10:1/0/terrain = 0
+10:1/0/terrains_peering_bit/bottom_side = 0
+10:1/0/terrains_peering_bit/bottom_left_corner = 0
+10:1/0/terrains_peering_bit/left_side = 0
+11:1/0 = 0
+11:1/0/terrain_set = 0
+11:1/0/terrain = 0
+11:1/0/terrains_peering_bit/top_side = 0
+11:1/0/terrains_peering_bit/bottom_side = 0
+11:1/0/terrains_peering_bit/bottom_left_corner = 0
+11:1/0/terrains_peering_bit/left_side = 0
+12:1/0 = 0
+12:1/0/terrain_set = 0
+12:1/0/terrain = 0
+12:1/0/terrains_peering_bit/right_side = 0
+12:1/0/terrains_peering_bit/bottom_side = 0
+12:1/0/terrains_peering_bit/bottom_left_corner = 0
+12:1/0/terrains_peering_bit/left_side = 0
+13:1/0 = 0
+13:1/0/terrain_set = 0
+13:1/0/terrain = 0
+13:1/0/terrains_peering_bit/top_side = 0
+13:1/0/terrains_peering_bit/right_side = 0
+13:1/0/terrains_peering_bit/bottom_side = 0
+13:1/0/terrains_peering_bit/bottom_left_corner = 0
+13:1/0/terrains_peering_bit/left_side = 0
+14:1/0 = 0
+14:1/0/terrain_set = 0
+14:1/0/terrain = 0
+14:1/0/terrains_peering_bit/top_side = 0
+14:1/0/terrains_peering_bit/top_right_corner = 0
+14:1/0/terrains_peering_bit/right_side = 0
+14:1/0/terrains_peering_bit/bottom_side = 0
+14:1/0/terrains_peering_bit/bottom_left_corner = 0
+14:1/0/terrains_peering_bit/left_side = 0
+15:1/0 = 0
+15:1/0/terrain_set = 0
+15:1/0/terrain = 0
+15:1/0/terrains_peering_bit/right_side = 0
+15:1/0/terrains_peering_bit/bottom_right_corner = 0
+15:1/0/terrains_peering_bit/bottom_side = 0
+15:1/0/terrains_peering_bit/bottom_left_corner = 0
+15:1/0/terrains_peering_bit/left_side = 0
+0:2/0 = 0
+0:2/0/terrain_set = 0
+0:2/0/terrain = 0
+0:2/0/terrains_peering_bit/top_side = 0
+0:2/0/terrains_peering_bit/right_side = 0
+0:2/0/terrains_peering_bit/bottom_right_corner = 0
+0:2/0/terrains_peering_bit/bottom_side = 0
+0:2/0/terrains_peering_bit/bottom_left_corner = 0
+0:2/0/terrains_peering_bit/left_side = 0
+1:2/0 = 0
+1:2/0/terrain_set = 0
+1:2/0/terrain = 0
+1:2/0/terrains_peering_bit/top_side = 0
+1:2/0/terrains_peering_bit/top_right_corner = 0
+1:2/0/terrains_peering_bit/right_side = 0
+1:2/0/terrains_peering_bit/bottom_right_corner = 0
+1:2/0/terrains_peering_bit/bottom_side = 0
+1:2/0/terrains_peering_bit/bottom_left_corner = 0
+1:2/0/terrains_peering_bit/left_side = 0
+2:2/0 = 0
+2:2/0/terrain_set = 0
+2:2/0/terrain = 0
+2:2/0/terrains_peering_bit/top_side = 0
+2:2/0/terrains_peering_bit/left_side = 0
+2:2/0/terrains_peering_bit/top_left_corner = 0
+3:2/0 = 0
+3:2/0/terrain_set = 0
+3:2/0/terrain = 0
+3:2/0/terrains_peering_bit/top_side = 0
+3:2/0/terrains_peering_bit/right_side = 0
+3:2/0/terrains_peering_bit/left_side = 0
+3:2/0/terrains_peering_bit/top_left_corner = 0
+4:2/0 = 0
+4:2/0/terrain_set = 0
+4:2/0/terrain = 0
+4:2/0/terrains_peering_bit/top_side = 0
+4:2/0/terrains_peering_bit/top_right_corner = 0
+4:2/0/terrains_peering_bit/right_side = 0
+4:2/0/terrains_peering_bit/left_side = 0
+4:2/0/terrains_peering_bit/top_left_corner = 0
+5:2/0 = 0
+5:2/0/terrain_set = 0
+5:2/0/terrain = 0
+5:2/0/terrains_peering_bit/top_side = 0
+5:2/0/terrains_peering_bit/bottom_side = 0
+5:2/0/terrains_peering_bit/left_side = 0
+5:2/0/terrains_peering_bit/top_left_corner = 0
+6:2/0 = 0
+6:2/0/terrain_set = 0
+6:2/0/terrain = 0
+6:2/0/terrains_peering_bit/top_side = 0
+6:2/0/terrains_peering_bit/right_side = 0
+6:2/0/terrains_peering_bit/bottom_side = 0
+6:2/0/terrains_peering_bit/left_side = 0
+6:2/0/terrains_peering_bit/top_left_corner = 0
+7:2/0 = 0
+7:2/0/terrain_set = 0
+7:2/0/terrain = 0
+7:2/0/terrains_peering_bit/top_side = 0
+7:2/0/terrains_peering_bit/top_right_corner = 0
+7:2/0/terrains_peering_bit/right_side = 0
+7:2/0/terrains_peering_bit/bottom_side = 0
+7:2/0/terrains_peering_bit/left_side = 0
+7:2/0/terrains_peering_bit/top_left_corner = 0
+8:2/0 = 0
+8:2/0/terrain_set = 0
+8:2/0/terrain = 0
+8:2/0/terrains_peering_bit/top_side = 0
+8:2/0/terrains_peering_bit/right_side = 0
+8:2/0/terrains_peering_bit/bottom_right_corner = 0
+8:2/0/terrains_peering_bit/bottom_side = 0
+8:2/0/terrains_peering_bit/left_side = 0
+8:2/0/terrains_peering_bit/top_left_corner = 0
+9:2/0 = 0
+9:2/0/terrain_set = 0
+9:2/0/terrain = 0
+9:2/0/terrains_peering_bit/top_side = 0
+9:2/0/terrains_peering_bit/top_right_corner = 0
+9:2/0/terrains_peering_bit/right_side = 0
+9:2/0/terrains_peering_bit/bottom_right_corner = 0
+9:2/0/terrains_peering_bit/bottom_side = 0
+9:2/0/terrains_peering_bit/left_side = 0
+9:2/0/terrains_peering_bit/top_left_corner = 0
+10:2/0 = 0
+10:2/0/terrain_set = 0
+10:2/0/terrain = 0
+10:2/0/terrains_peering_bit/top_side = 0
+10:2/0/terrains_peering_bit/bottom_side = 0
+10:2/0/terrains_peering_bit/bottom_left_corner = 0
+10:2/0/terrains_peering_bit/left_side = 0
+10:2/0/terrains_peering_bit/top_left_corner = 0
+11:2/0 = 0
+11:2/0/terrain_set = 0
+11:2/0/terrain = 0
+11:2/0/terrains_peering_bit/top_side = 0
+11:2/0/terrains_peering_bit/right_side = 0
+11:2/0/terrains_peering_bit/bottom_side = 0
+11:2/0/terrains_peering_bit/bottom_left_corner = 0
+11:2/0/terrains_peering_bit/left_side = 0
+11:2/0/terrains_peering_bit/top_left_corner = 0
+12:2/0 = 0
+12:2/0/terrain_set = 0
+12:2/0/terrain = 0
+12:2/0/terrains_peering_bit/top_side = 0
+12:2/0/terrains_peering_bit/top_right_corner = 0
+12:2/0/terrains_peering_bit/right_side = 0
+12:2/0/terrains_peering_bit/bottom_side = 0
+12:2/0/terrains_peering_bit/bottom_left_corner = 0
+12:2/0/terrains_peering_bit/left_side = 0
+12:2/0/terrains_peering_bit/top_left_corner = 0
+13:2/0 = 0
+13:2/0/terrain_set = 0
+13:2/0/terrain = 0
+13:2/0/terrains_peering_bit/top_side = 0
+13:2/0/terrains_peering_bit/right_side = 0
+13:2/0/terrains_peering_bit/bottom_right_corner = 0
+13:2/0/terrains_peering_bit/bottom_side = 0
+13:2/0/terrains_peering_bit/bottom_left_corner = 0
+13:2/0/terrains_peering_bit/left_side = 0
+13:2/0/terrains_peering_bit/top_left_corner = 0
+14:2/0 = 0
+14:2/0/terrain_set = 0
+14:2/0/terrain = 0
+14:2/0/terrains_peering_bit/top_side = 0
+14:2/0/terrains_peering_bit/top_right_corner = 0
+14:2/0/terrains_peering_bit/right_side = 0
+14:2/0/terrains_peering_bit/bottom_right_corner = 0
+14:2/0/terrains_peering_bit/bottom_side = 0
+14:2/0/terrains_peering_bit/bottom_left_corner = 0
+14:2/0/terrains_peering_bit/left_side = 0
+14:2/0/terrains_peering_bit/top_left_corner = 0
+
+[resource]
+resource_name = "dread-rooms"
+tile_size = Vector2i(16, 16)
+terrain_set_0/mode = 0
+terrain_set_0/terrain_0/name = "Ceiling (wall-top border)"
+terrain_set_0/terrain_0/color = Color(0.91, 0.89, 0.84, 1)
+sources/0 = SubResource("src_house_floor_overlays_clean")
+sources/1 = SubResource("src_house_floor_overlays_decayed")
+sources/2 = SubResource("src_house_floor_overlays_horror")
+sources/3 = SubResource("src_house_furniture_beds_clean")
+sources/4 = SubResource("src_house_furniture_beds_decayed")
+sources/5 = SubResource("src_house_furniture_beds_horror")
+sources/6 = SubResource("src_house_furniture_candelabras_clean")
+sources/7 = SubResource("src_house_furniture_candelabras_decayed")
+sources/8 = SubResource("src_house_furniture_candelabras_horror")
+sources/9 = SubResource("src_house_furniture_dining_chairs_clean")
+sources/10 = SubResource("src_house_furniture_dining_chairs_decayed")
+sources/11 = SubResource("src_house_furniture_dining_chairs_horror")
+sources/12 = SubResource("src_house_furniture_dining_tables_clean")
+sources/13 = SubResource("src_house_furniture_dining_tables_decayed")
+sources/14 = SubResource("src_house_furniture_dining_tables_horror")
+sources/15 = SubResource("src_house_furniture_fireplaces_clean")
+sources/16 = SubResource("src_house_furniture_fireplaces_decayed")
+sources/17 = SubResource("src_house_furniture_fireplaces_horror")
+sources/18 = SubResource("src_house_furniture_grandfather_clocks_clean")
+sources/19 = SubResource("src_house_furniture_grandfather_clocks_decayed")
+sources/20 = SubResource("src_house_furniture_grandfather_clocks_horror")
+sources/21 = SubResource("src_house_furniture_seating_clean")
+sources/22 = SubResource("src_house_furniture_seating_decayed")
+sources/23 = SubResource("src_house_furniture_seating_horror")
+sources/24 = SubResource("src_house_furniture_wardrobes_vanities_clean")
+sources/25 = SubResource("src_house_furniture_wardrobes_vanities_decayed")
+sources/26 = SubResource("src_house_furniture_wardrobes_vanities_horror")
+sources/27 = SubResource("src_house_halloween_halloween_decor_clean")
+sources/28 = SubResource("src_house_halloween_halloween_decor_decayed")
+sources/29 = SubResource("src_house_halloween_halloween_decor_horror")
+sources/30 = SubResource("src_house_halloween_jack_o_lanterns_clean")
+sources/31 = SubResource("src_house_halloween_jack_o_lanterns_horror")
+sources/32 = SubResource("src_house_halloween_tabletop_decor_clean")
+sources/33 = SubResource("src_house_halloween_tabletop_decor_decayed")
+sources/34 = SubResource("src_house_halloween_tabletop_decor_horror")
+sources/35 = SubResource("src_house_wall_overlays_clean")
+sources/36 = SubResource("src_house_wall_overlays_decayed")
+sources/37 = SubResource("src_house_wall_overlays_horror")
+sources/38 = SubResource("src_house_wall_props_doors_clean")
+sources/39 = SubResource("src_house_wall_props_doors_decayed")
+sources/40 = SubResource("src_house_wall_props_doors_horror")
+sources/41 = SubResource("src_house_wall_props_windows_clean")
+sources/42 = SubResource("src_house_wall_props_windows_decayed")
+sources/43 = SubResource("src_house_wall_props_windows_horror")
+sources/44 = SubResource("src_room_builder_band_bone")
+sources/45 = SubResource("src_room_builder_doormats")
+sources/46 = SubResource("src_room_builder_floors_hardwood")
+sources/47 = SubResource("src_room_builder_stairs_manor")
+sources/48 = SubResource("src_room_builder_walls_floral")
+sources/49 = SubResource("src_border_autotile")

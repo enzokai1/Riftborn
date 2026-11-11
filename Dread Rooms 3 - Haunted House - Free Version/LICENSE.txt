@@ -1,0 +1,28 @@
+PixLog — Asset Licence
+
+Thank you for buying a PixLog pack.
+
+YOU MAY
+- Use the assets in any number of your own projects: games, apps, prototypes, game
+  jams, videos, streams and trailers, free or commercial.
+- Edit, recolour, crop, combine and animate them.
+- Ship them inside your compiled game or app, where players cannot easily extract
+  them as a pack.
+
+YOU MAY NOT
+- Resell, give away, share or re-upload the assets themselves, edited or not, on
+  their own or as part of another asset pack, tileset, template or sprite
+  collection.
+- Use the assets to train, fine-tune or evaluate AI models, or include them in a
+  dataset.
+- Claim the assets as your own original artwork, or use them in a logo or
+  trademark.
+
+Credit ("Art by PixLog") is appreciated but not required.
+
+One purchase covers one person or one small team working on your projects. If you
+are unsure whether your use is allowed, ask through the store page before you use
+the assets.
+
+The assets were generated with AI assistance and then selected, repaired, recoloured
+and assembled by me. The assets are provided as they are, with no warranty.

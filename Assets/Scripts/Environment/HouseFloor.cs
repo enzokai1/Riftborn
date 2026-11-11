@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 [ExecuteAlways]
 [DisallowMultipleComponent]
@@ -8,6 +8,7 @@ public class HouseFloor : MonoBehaviour
     [SerializeField] private Vector2 mapSize = new Vector2(100f, 100f);
     private SpriteRenderer floorRenderer;
     private bool sizeDirty;
+    private bool hasHauntedWalls;
     public static HouseFloor Active { get; private set; }
     public Rect Bounds => new Rect((Vector2)transform.position - mapSize * 0.5f, mapSize);
 
@@ -59,12 +60,22 @@ public class HouseFloor : MonoBehaviour
 
     public bool Contains(Vector2 position, float margin)
     {
+        if (hasHauntedWalls)
+        {
+            Rect bounds = Bounds;
+            return position.x >= bounds.xMin + 2f + margin
+                && position.x <= bounds.xMax - 2f - margin
+                && position.y >= bounds.yMin + 2f + margin
+                && position.y <= bounds.yMax - 2f - margin;
+        }
         return (Clamp(position, Vector2.one * margin) - position).sqrMagnitude < 0.000001f;
     }
 
     private void CreateBorders()
     {
         if (transform.Find("MapBorders") != null) return;
+        hasHauntedWalls = HauntedRoomWalls.TryBuild(transform, floorRenderer, mapSize);
+        if (hasHauntedWalls) return;
         Transform root = new GameObject("MapBorders").transform;
         root.SetParent(transform, false);
         for (int i = 0; i < 4; i++)
