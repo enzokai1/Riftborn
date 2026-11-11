@@ -46,6 +46,10 @@ public class FirstStageSettings : ISerializationCallbackReceiver
     [Min(1f)] public float bossDashSpeed = 12f;
     [Min(0.1f)] public float bossDashDuration = 0.6f;
     [Min(1f)] public float bossDashCooldown = 2.5f;
+    [Tooltip("Distance of the committed forward step during Gunter's knife swing.")]
+    [Min(0f)] public float bossSwingAdvance = 1f;
+    [Tooltip("Extra time Gunter stays still after the knife animation, including missed attacks.")]
+    [Min(0f)] public float bossSwingRecovery = 0.55f;
     [Min(1f)] public float bossAreaRadius = 4f;
     [Min(1f)] public float bossAttackInterval = 6f;
     [Min(0.1f)] public float bossWarningDuration = 1.25f;

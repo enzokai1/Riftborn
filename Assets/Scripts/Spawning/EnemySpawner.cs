@@ -38,7 +38,9 @@ public class EnemySpawner : MonoBehaviour
         float interval = matchStats.Rules.TimedSpawnInterval(matchStats.ElapsedSeconds);
         if (elapsedTime < interval) return;
         elapsedTime -= interval;
-        int alive = FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None).Length;
+        int alive = 0;
+        foreach (EnemyHealth enemy in FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None))
+            if (!enemy.IsDead) alive++;
         int count = Mathf.Min(matchStats.Rules.TimedSpawnCount(matchStats.ElapsedSeconds),
             Mathf.Max(1, matchStats.Rules.maximumAliveGhosts) - alive);
         for (int i = 0; i < count; i++) SpawnEnemy(false, wave);
