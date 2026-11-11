@@ -7,6 +7,7 @@ public class FirstStageObjective : MonoBehaviour
 {
     private MatchStats match;
     private BoxCollider2D bedCollider;
+    private Collider2D playerFootprint;
     public Collider2D BedObstacle => bedCollider;
     private StageVisuals visuals;
     private Transform fragmentArrow;
@@ -28,6 +29,21 @@ public class FirstStageObjective : MonoBehaviour
     public IReadOnlyList<Vector2> FragmentPositions => fragmentPositions;
     public IReadOnlyList<StagePickup> Fragments => fragments;
 
+    // Matches the visible doorway using the center of the player's feet collider.
+    private static readonly Vector2 ExitHalfSize = new Vector2(1f, 1.4f);
+    public bool CanExit
+    {
+        get
+        {
+            if (match == null || match.Player == null || match.Finished || match.IsPaused
+                || !match.BossDefeated || !RingCollected || !LetterCollected
+                || exit == null || !exit.gameObject.activeInHierarchy) return false;
+            Vector3 feet = playerFootprint != null ? playerFootprint.bounds.center : match.Player.transform.position;
+            Vector3 local = exit.InverseTransformPoint(feet);
+            return Mathf.Abs(local.x) <= ExitHalfSize.x && Mathf.Abs(local.y) <= ExitHalfSize.y;
+        }
+    }
+
     public void Initialize(MatchStats stats)
     {
         match = stats;
@@ -37,6 +53,7 @@ public class FirstStageObjective : MonoBehaviour
         BuildBedroom(bounds);
         Physics2D.SyncTransforms();
         Collider2D playerCollider = match.Player.GetComponent<Collider2D>();
+        playerFootprint = playerCollider;
         float playerHalfWidth = playerCollider != null ? playerCollider.bounds.extents.x : 0.25f;
         Vector2 spawn = BedroomBedPosition(bounds) + Vector2.right * 1.5f;
         if (bedCollider != null)
@@ -61,7 +78,8 @@ public class FirstStageObjective : MonoBehaviour
         exit.SetParent(transform, false);
         exit.gameObject.SetActive(false);
         exitOutline = visuals.Outline(exit, "Porta", new[] {
-            new Vector3(-1, -1.4f), new Vector3(-1, 1.4f), new Vector3(1, 1.4f), new Vector3(1, -1.4f)
+            new Vector3(-ExitHalfSize.x, -ExitHalfSize.y), new Vector3(-ExitHalfSize.x, ExitHalfSize.y),
+            new Vector3(ExitHalfSize.x, ExitHalfSize.y), new Vector3(ExitHalfSize.x, -ExitHalfSize.y)
         }, new Color(0.5f, 0.3f, 0.3f), 0.2f);
         RequiredFragments = Mathf.Clamp(match.Rules.fragmentCount, 2, 12);
         float separation = FragmentSeparation;
@@ -232,7 +250,7 @@ public class FirstStageObjective : MonoBehaviour
             if (match.Victory) return "Quarto concluído. Sua mãe está na carta.";
             if (match.GameOver) return "Winston caiu. Tente novamente.";
             if (match.BossDefeated)
-                return !RingCollected || !LetterCollected ? "Recolha o Anel dos Mortos e a carta da mãe." : "Vá até a porta. Pressione E para sair.";
+                return !RingCollected || !LetterCollected ? "Recolha o Anel dos Mortos e a carta da mãe." : "A saída está liberada. Vá até a porta.";
             if (match.BossSpawned) return "Derrote Gunter. Afaste-se do círculo vermelho!";
             return CollectedFragments < RequiredFragments
                 ? $"Encontre os fragmentos amaldiçoados: {CollectedFragments}/{RequiredFragments}"
@@ -255,8 +273,11 @@ public class FirstStageObjective : MonoBehaviour
             new Vector3(0f, 0.3f), new Vector3(0f, 0.1f),
             new Vector3(-0.45f, 0.1f)
         };
-        LineRenderer outline = visuals.Outline(fragmentArrow, "Contorno", shape, Color.black, 0.20f);
-        fragmentArrowGold = visuals.Outline(fragmentArrow, "Seta dourada", shape, new Color(1f, 0.8f, 0.1f), 0.11f);
+        // Reduce both geometry and stroke: LineRenderer width is measured in world units.
+        const float arrowSize = 0.7f;
+        for (int i = 0; i < shape.Length; i++) shape[i] *= arrowSize;
+        LineRenderer outline = visuals.Outline(fragmentArrow, "Contorno", shape, new Color(0.08f, 0.05f, 0.02f), 0.20f * arrowSize);
+        fragmentArrowGold = visuals.Outline(fragmentArrow, "Seta dourada", shape, new Color(1f, 0.8f, 0.1f), 0.11f * arrowSize);
         outline.sortingLayerID = fragmentArrowGold.sortingLayerID = playerVisual != null ? playerVisual.sortingLayerID : 0;
         outline.sortingOrder = playerVisual != null ? Mathf.Max(100, playerVisual.sortingOrder + 10) : 100;
         fragmentArrowGold.sortingOrder = outline.sortingOrder + 1;
@@ -302,7 +323,7 @@ public class FirstStageObjective : MonoBehaviour
         if (match == null || match.Finished || match.IsPaused || Keyboard.current == null) return;
         if (!Keyboard.current.eKey.wasPressedThisFrame) return;
         if (!Assembled) TryAssemble();
-        if (match.BossDefeated && Vector2.Distance(match.Player.transform.position, exit.position) < 2.5f)
+        if (CanExit)
             match.CompleteStage();
     }
 

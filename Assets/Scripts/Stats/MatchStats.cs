@@ -179,9 +179,11 @@ public class MatchStats : MonoBehaviour
             projectile.gameObject.SetActive(false);
             Destroy(projectile.gameObject);
         }
-        // Defeated ghosts must not physically block the path to the rewards.
+        // EnemyDeath removes collisions immediately and finishes the corpse animation.
+        // This also works when the kill reporter runs before the death animation callback.
         foreach (EnemyHealth enemy in FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None))
         {
+            if (enemy.IsDead && enemy.TryGetComponent<EnemyDeath>(out _)) continue;
             enemy.gameObject.SetActive(false);
             Destroy(enemy.gameObject);
         }
