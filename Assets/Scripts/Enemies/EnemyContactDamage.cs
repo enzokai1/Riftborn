@@ -14,7 +14,7 @@ public class EnemyContactDamage : MonoBehaviour
     private PlayerHealth player;
     private Collider2D playerCollider;
     private float nextAttackTime;
-    private float elapsed;
+    private Vector2 swingDirection;
     private bool attacking;
     private bool hitApplied;
     private MatchStats bossMatch;
@@ -59,14 +59,14 @@ public class EnemyContactDamage : MonoBehaviour
         }
         if (attacking)
         {
-            elapsed += Time.deltaTime;
-            // Frame 4 of the seven-frame knife swing is the first impact pose.
-            if (!hitApplied && elapsed >= attackDuration * (4f / 7f))
+            // Read the physics clock so damage happens after the lunge has moved the body.
+            if (!hitApplied && controller.enabled && controller.AttackElapsed >= controller.AttackImpactTime)
             {
                 hitApplied = true;
-                if (InRange()) player.TakeDamage(damage);
+                if (InSwingRange()) player.TakeDamage(damage);
             }
-            if (elapsed >= attackDuration) attacking = false;
+            // Recovery also blocks the area attack and another dash.
+            if (!controller.IsAttacking) attacking = false;
             return;
         }
         if (Time.time < nextAttackTime) return;
@@ -86,10 +86,22 @@ public class EnemyContactDamage : MonoBehaviour
     {
         attacking = true;
         hitApplied = false;
-        elapsed = 0f;
-        nextAttackTime = Time.time + Mathf.Max(attackDuration,
+        swingDirection = ((Vector2)playerCollider.bounds.center - (Vector2)ownCollider.bounds.center).normalized;
+        float recovery = bossMatch != null ? Mathf.Max(0f, bossMatch.Rules.bossSwingRecovery) : 0f;
+        nextAttackTime = Time.time + Mathf.Max(attackDuration + recovery,
             bossMatch != null ? bossMatch.Rules.bossDashCooldown : damageInterval);
-        controller.PlayAttack(attackDuration);
+        controller.PlayAttack(attackDuration, swingDirection,
+            bossMatch != null ? bossMatch.Rules.bossSwingAdvance : 0f, recovery);
+    }
+
+    private bool InSwingRange()
+    {
+        if (!InRange()) return false;
+        if (bossMatch == null) return true;
+        Vector2 towardPlayer = (Vector2)playerCollider.bounds.center - (Vector2)ownCollider.bounds.center;
+        // The boss commits to a forward stab, allowing a sidestep or a dodge behind it.
+        return towardPlayer.sqrMagnitude < 0.0001f
+            || Vector2.Dot(swingDirection, towardPlayer.normalized) >= Mathf.Cos(25f * Mathf.Deg2Rad);
     }
 
     private bool InRange()
@@ -101,7 +113,11 @@ public class EnemyContactDamage : MonoBehaviour
 
     private void OnDisable()
     {
-        if (dashApproach && controller != null) controller.StopDash();
+        if (controller != null)
+        {
+            if (dashApproach) controller.StopDash();
+            if (attacking) controller.CancelAttack();
+        }
         dashApproach = false;
         attacking = false;
         hitApplied = false;

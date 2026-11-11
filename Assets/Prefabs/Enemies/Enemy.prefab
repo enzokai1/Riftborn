@@ -148,6 +148,21 @@ MonoBehaviour:
   - {fileID: -301280052444656893, guid: 10efc58b88ac7f94589944a6acf432ef, type: 3}
   - {fileID: 2613070745431093251, guid: 10efc58b88ac7f94589944a6acf432ef, type: 3}
   - {fileID: 3161286735664444143, guid: 10efc58b88ac7f94589944a6acf432ef, type: 3}
+  secondAttackFrames:
+  - {fileID: -4512729236205944664, guid: 0719f4b5199aaae48a1e6d8af8e57cf2, type: 3}
+  - {fileID: -5573455744582887279, guid: 0719f4b5199aaae48a1e6d8af8e57cf2, type: 3}
+  - {fileID: 1051274898172060042, guid: 0719f4b5199aaae48a1e6d8af8e57cf2, type: 3}
+  - {fileID: -4678470051254981495, guid: 0719f4b5199aaae48a1e6d8af8e57cf2, type: 3}
+  - {fileID: -4788476823661566636, guid: 0719f4b5199aaae48a1e6d8af8e57cf2, type: 3}
+  - {fileID: 3974580466606960663, guid: 0719f4b5199aaae48a1e6d8af8e57cf2, type: 3}
+  - {fileID: -5554250229902168988, guid: 0719f4b5199aaae48a1e6d8af8e57cf2, type: 3}
+  hurtFrames:
+  - {fileID: 7716186106518993825, guid: 22d2211a4762f64479a2ca47e1413c39, type: 3}
+  - {fileID: -3163463401301888315, guid: 22d2211a4762f64479a2ca47e1413c39, type: 3}
+  - {fileID: -6471149857940192170, guid: 22d2211a4762f64479a2ca47e1413c39, type: 3}
+  - {fileID: 7432858895691206856, guid: 22d2211a4762f64479a2ca47e1413c39, type: 3}
+  hurtDuration: 0.24
+  hurtCooldown: 0.2
   idleFrames:
   - {fileID: 4610576671343732192, guid: c452cc0d450d8d947a40014fdb7d9369, type: 3}
   - {fileID: 7933169506272541288, guid: c452cc0d450d8d947a40014fdb7d9369, type: 3}
@@ -236,6 +251,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDeath
   experiencePickupPrefab: {fileID: 5711344465707192043, guid: 3574a3c07a9f5f64788c7cc91614e622, type: 3}
+  deathFrames:
+  - {fileID: 555109730677885693, guid: 94eed6f737b9238429e675901cd1cf71, type: 3}
+  - {fileID: 2319290710629780962, guid: 94eed6f737b9238429e675901cd1cf71, type: 3}
+  - {fileID: 8955863190385351865, guid: 94eed6f737b9238429e675901cd1cf71, type: 3}
+  - {fileID: -8178908634341365064, guid: 94eed6f737b9238429e675901cd1cf71, type: 3}
+  framesPerSecond: 8
 --- !u!114 &2756320537213178296
 MonoBehaviour:
   m_ObjectHideFlags: 0

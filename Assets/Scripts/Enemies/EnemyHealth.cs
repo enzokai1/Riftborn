@@ -62,6 +62,11 @@ public class EnemyHealth : MonoBehaviour
         if (damage <= 0 || IsDead) return;
         CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
         if (IsDead) Died?.Invoke();
+        else
+        {
+            if (movement == null) movement = GetComponent<EnemyController>();
+            if (movement != null) movement.PlayHurt();
+        }
     }
 }
 

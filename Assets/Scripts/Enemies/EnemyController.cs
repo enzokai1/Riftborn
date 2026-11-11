@@ -10,6 +10,10 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private Sprite[] idleFrames;
     [SerializeField] private Sprite[] walkFrames;
     [SerializeField] private Sprite[] attackFrames;
+    [SerializeField] private Sprite[] secondAttackFrames;
+    [SerializeField] private Sprite[] hurtFrames;
+    [SerializeField, Min(0.01f)] private float hurtDuration = 0.24f;
+    [SerializeField, Min(0f)] private float hurtCooldown = 0.2f;
 
     private Rigidbody2D body;
     private Collider2D bodyCollider;
@@ -22,6 +26,17 @@ public class EnemyController : MonoBehaviour
     private float animationElapsed;
     private float attackElapsed;
     private float attackDuration;
+    private float attackRecovery;
+    private Vector2 attackDirection;
+    private float attackLungeDistance;
+    private Sprite[] currentAttackFrames;
+    private bool nextAttackIsSecond;
+    private int impactFrame;
+    private bool showingHurt;
+    private float hurtElapsed;
+    private float nextHurtAt;
+    public float AttackElapsed => attackElapsed;
+    public float AttackImpactTime => attackDuration * (4f / 7f);
     private bool moving;
     public Transform Target => target;
     public bool IsAttacking { get; private set; }
@@ -55,20 +70,68 @@ public class EnemyController : MonoBehaviour
     public void SetMovementSpeed(float speed) => movementSpeed = Mathf.Max(0f, speed);
     public void SetTarget(Transform newTarget) => target = newTarget;
 
-    public void PlayAttack(float duration)
+    public void PlayAttack(float duration, Vector2 lungeDirection = default,
+        float lungeDistance = 0f, float recovery = 0f)
     {
         IsAttacking = true;
+        showingHurt = false;
+        bool second = nextAttackIsSecond && secondAttackFrames != null && secondAttackFrames.Length > 0;
+        currentAttackFrames = second ? secondAttackFrames : attackFrames;
+        impactFrame = second ? 3 : 4;
+        nextAttackIsSecond = !nextAttackIsSecond;
         attackElapsed = 0f;
         attackDuration = Mathf.Max(0.01f, duration);
+        attackRecovery = Mathf.Max(0f, recovery);
+        attackDirection = lungeDirection.normalized;
+        attackLungeDistance = Mathf.Max(0f, lungeDistance);
+        dashRemaining = 0f;
+        if (attackLungeDistance > 0f)
+            body.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         body.linearVelocity = Vector2.zero;
         FaceTarget();
-        ShowFrame(attackFrames, 0);
+        ShowFrame(currentAttackFrames, 0);
+    }
+
+    public void PlayHurt()
+    {
+        // Damage feedback never interrupts a swing/dash or restarts under continuous fire.
+        if (!isActiveAndEnabled || IsAttacking || IsDashing || showingHurt || Time.time < nextHurtAt
+            || hurtFrames == null || hurtFrames.Length == 0) return;
+        showingHurt = true;
+        hurtElapsed = 0f;
+        nextHurtAt = Time.time + Mathf.Max(0.01f, hurtDuration) + Mathf.Max(0f, hurtCooldown);
+        ShowFrame(hurtFrames, 0);
+    }
+
+    public void CancelAttack()
+    {
+        IsAttacking = false;
+        attackElapsed = 0f;
+        attackLungeDistance = 0f;
+        attackRecovery = 0f;
+        if (body != null) body.linearVelocity = Vector2.zero;
     }
 
     private void FixedUpdate()
     {
         moving = false;
-        if (target == null || IsAttacking)
+        if (IsAttacking)
+        {
+            if (target == null) { CancelAttack(); return; }
+            // Advance only during frames 2-4, ending at the knife's impact pose.
+            // Clip the interval so different physics step sizes cover the same distance.
+            float previous = attackElapsed;
+            attackElapsed += Time.fixedDeltaTime;
+            float start = attackDuration * (2f / 7f);
+            float end = AttackImpactTime;
+            float advance = Mathf.Max(0f, Mathf.Min(attackElapsed, end) - Mathf.Max(previous, start));
+            body.linearVelocity = attackDirection * (attackLungeDistance / (end - start))
+                * (advance / Time.fixedDeltaTime);
+            if (attackElapsed >= attackDuration + attackRecovery)
+                IsAttacking = false;
+            return;
+        }
+        if (target == null)
         {
             body.linearVelocity = Vector2.zero;
             return;
@@ -186,23 +249,45 @@ public class EnemyController : MonoBehaviour
     {
         if (IsAttacking)
         {
-            attackElapsed += Time.deltaTime;
-            if (attackElapsed < attackDuration)
+            // Keep the final attack pose during recovery; physics owns the attack clock.
+            if (attackElapsed < attackDuration + attackRecovery)
             {
-                int count = attackFrames == null ? 0 : attackFrames.Length;
-                ShowFrame(attackFrames, Mathf.Min(count - 1,
-                    Mathf.FloorToInt(attackElapsed / attackDuration * count)));
+                ShowAttackFrame();
                 return;
             }
             IsAttacking = false;
         }
         FaceTarget();
+        if (showingHurt)
+        {
+            hurtElapsed += Time.deltaTime;
+            float duration = Mathf.Max(0.01f, hurtDuration);
+            if (hurtElapsed < duration)
+            {
+                ShowFrame(hurtFrames, Mathf.FloorToInt(hurtElapsed / duration * hurtFrames.Length));
+                return;
+            }
+            showingHurt = false;
+        }
         Sprite[] frames = moving ? walkFrames : idleFrames;
         if (frames == null || frames.Length == 0) return;
         float rate = Mathf.Max(1f, animationFramesPerSecond);
         // Keep the cycle advancing even when contact briefly changes the movement state.
         animationElapsed = (animationElapsed + Time.deltaTime) % (frames.Length / rate);
         ShowFrame(frames, Mathf.FloorToInt(animationElapsed * rate));
+    }
+
+    private void ShowAttackFrame()
+    {
+        if (currentAttackFrames == null || currentAttackFrames.Length == 0) return;
+        int impact = Mathf.Min(impactFrame, currentAttackFrames.Length - 1);
+        // Attack02 impacts at frame 3; retime its poses to keep the existing hit at 0.4s.
+        // Both attacks keep the same duration, lunge, damage and recovery.
+        float frame = attackElapsed < AttackImpactTime
+            ? attackElapsed / AttackImpactTime * impact
+            : impact + (attackElapsed - AttackImpactTime) / (attackDuration - AttackImpactTime)
+                * (currentAttackFrames.Length - impact);
+        ShowFrame(currentAttackFrames, Mathf.FloorToInt(frame));
     }
 
     private void FaceTarget()
@@ -222,7 +307,8 @@ public class EnemyController : MonoBehaviour
     private void OnDisable()
     {
         dashRemaining = 0f;
-        IsAttacking = false;
+        CancelAttack();
+        showingHurt = false;
         animationElapsed = 0f;
         moving = false;
         if (body != null) body.linearVelocity = Vector2.zero;

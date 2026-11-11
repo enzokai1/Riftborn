@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(PlayerHealth))]
@@ -57,7 +56,6 @@ public class PlayerRing : MonoBehaviour
     private void Update()
     {
         if (phased && (Time.time >= activeUntil || match == null || match.Finished)) EndEffect();
-        if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame) TryActivate();
     }
 
     private void EndEffect()
