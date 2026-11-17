@@ -7,8 +7,10 @@ public class FirstStageObjective : MonoBehaviour
 {
     private MatchStats match;
     private BoxCollider2D bedCollider;
+    private BoxCollider2D wardrobeCollider;
     private Collider2D playerFootprint;
     public Collider2D BedObstacle => bedCollider;
+    public Collider2D WardrobeObstacle => wardrobeCollider;
     private StageVisuals visuals;
     private Transform fragmentArrow;
     private LineRenderer fragmentArrowGold;
@@ -17,8 +19,6 @@ public class FirstStageObjective : MonoBehaviour
     private readonly List<Vector2> fragmentPositions = new List<Vector2>();
     private Transform ritual;
     private Transform exit;
-    private LineRenderer ritualCircle;
-    private LineRenderer exitOutline;
     public int CollectedFragments { get; private set; }
     public int RequiredFragments { get; private set; }
     public bool Assembled { get; private set; }
@@ -72,15 +72,18 @@ public class FirstStageObjective : MonoBehaviour
         ritual = new GameObject("Selo dos fragmentos").transform;
         ritual.SetParent(transform, false);
         ritual.position = Clamp((Vector2)match.Player.transform.position + Vector2.down * 4f, bounds);
-        ritualCircle = visuals.Circle(ritual, "Selo", 1.4f, new Color(0.6f, 0.4f, 0.8f));
-        visuals.Outline(ritual, "Runas", new[] { new Vector3(-1, -0.7f), new Vector3(0, 1.1f), new Vector3(1, -0.7f) }, Color.magenta);
         exit = new GameObject("Saída do quarto").transform;
         exit.SetParent(transform, false);
         exit.gameObject.SetActive(false);
-        exitOutline = visuals.Outline(exit, "Porta", new[] {
-            new Vector3(-ExitHalfSize.x, -ExitHalfSize.y), new Vector3(-ExitHalfSize.x, ExitHalfSize.y),
-            new Vector3(ExitHalfSize.x, ExitHalfSize.y), new Vector3(ExitHalfSize.x, -ExitHalfSize.y)
-        }, new Color(0.5f, 0.3f, 0.3f), 0.2f);
+        Sprite doorSprite = Resources.Load<Sprite>("Art/DreadRoom/exit-door");
+        if (doorSprite != null)
+        {
+            SpriteRenderer door = visuals.Block(exit, "Porta envelhecida", Vector2.zero, Vector2.one, Color.white, 19);
+            door.sprite = doorSprite;
+            door.transform.localScale = new Vector3(ExitHalfSize.x * 2f / doorSprite.bounds.size.x,
+                ExitHalfSize.y * 2f / doorSprite.bounds.size.y, 1f);
+        }
+        else Debug.LogError("Missing Dread Rooms exit door sprite.", this);
         RequiredFragments = Mathf.Clamp(match.Rules.fragmentCount, 2, 12);
         float separation = FragmentSeparation;
         for (int i = 0; i < RequiredFragments; i++)
@@ -213,17 +216,38 @@ public class FirstStageObjective : MonoBehaviour
             match.Player.GetComponent<PlayerRing>().Unlock();
         }
         else LetterCollected = true;
-        if (RingCollected && LetterCollected)
-            exitOutline.startColor = exitOutline.endColor = new Color(0.4f, 1f, 0.7f);
         match.NotifyChanged();
     }
 
+#if UNITY_EDITOR
+    public void EditorCompleteFragments()
+    {
+        if (match == null || match.Finished || match.IsPaused) return;
+        foreach (StagePickup fragment in fragments)
+            if (fragment != null) { fragment.gameObject.SetActive(false); Destroy(fragment.gameObject); }
+        CollectedFragments = RequiredFragments;
+        TryAssemble();
+        match.NotifyChanged();
+    }
+
+    public void EditorUnlockExit()
+    {
+        if (match == null || match.Finished || match.IsPaused) return;
+        if (!match.BossDefeated) match.RegisterKill(true);
+        foreach (StagePickup pickup in GetComponentsInChildren<StagePickup>())
+        {
+            if (pickup.Kind == StagePickupKind.Fragment) continue;
+            Collect(pickup);
+            pickup.gameObject.SetActive(false);
+            Destroy(pickup.gameObject);
+        }
+    }
+#endif
     public bool TryAssemble()
     {
         if (match.Finished || match.IsPaused || Assembled || RequiredFragments <= 0
             || CollectedFragments < RequiredFragments) return false;
         Assembled = true;
-        ritualCircle.startColor = ritualCircle.endColor = Color.red;
         match.PrepareBossEncounter();
         match.NotifyChanged();
         return true;
@@ -328,8 +352,13 @@ public class FirstStageObjective : MonoBehaviour
 
     public bool IsFurnitureBlocked(Vector2 point, float margin)
     {
-        if (bedCollider == null) return false;
-        Bounds occupied = bedCollider.bounds;
+        return OverlapsFurniture(bedCollider, point, margin) || OverlapsFurniture(wardrobeCollider, point, margin);
+    }
+
+    private static bool OverlapsFurniture(Collider2D furniture, Vector2 point, float margin)
+    {
+        if (furniture == null) return false;
+        Bounds occupied = furniture.bounds;
         occupied.Expand(new Vector3(margin * 2f, margin * 2f, 0f));
         return point.x >= occupied.min.x && point.x <= occupied.max.x
             && point.y >= occupied.min.y && point.y <= occupied.max.y;
@@ -337,34 +366,87 @@ public class FirstStageObjective : MonoBehaviour
 
     private void BuildBedroom(Rect bounds)
     {
-        // Only the bed is solid; fragments and spawns keep clear of it.
+        // Solid furniture is also excluded from fragment placement and enemy spawns.
         Transform room = new GameObject("Mobília do quarto").transform;
         room.SetParent(transform, false);
         room.position = Vector3.zero;
         Vector2 corner = BedroomBedPosition(bounds);
         visuals.Block(room, "Tapete", corner + Vector2.down * 2f, new Vector2(9, 11), new Color(0.22f, 0.12f, 0.26f), -90);
-        Sprite[] bedSprites = Resources.LoadAll<Sprite>("Art/BedroomFurniture");
-        if (bedSprites.Length > 0)
-        {
-            Sprite bedSprite = bedSprites[0];
-            SpriteRenderer bed = visuals.Block(room, "Cama", corner, Vector2.one, Color.white);
-            bed.sprite = bedSprite;
-            PlayerSpriteAnimation playerAnimation = match.Player.GetComponent<PlayerSpriteAnimation>();
-            float playerHeight = playerAnimation != null ? playerAnimation.StandingHeight : 1.48f;
-            bed.transform.localScale = Vector3.one * (playerHeight * 1.35f / bedSprite.bounds.size.y);
-            bedCollider = bed.gameObject.AddComponent<BoxCollider2D>();
-            bedCollider.size = bedSprite.bounds.size * 0.9f;
-            bedCollider.offset = bedSprite.bounds.center;
-            Rigidbody2D bedBody = bed.gameObject.AddComponent<Rigidbody2D>();
-            bedBody.bodyType = RigidbodyType2D.Static;
-        }
-        else
-        {
-            Debug.LogError("BedroomFurniture bed sprite is missing.", this);
-        }
+        PlayerSpriteAnimation playerAnimation = match.Player.GetComponent<PlayerSpriteAnimation>();
+        float playerHeight = playerAnimation != null ? playerAnimation.StandingHeight : 1.48f;
+        bedCollider = CreateBedroomFurniture(room, "Cama", "bed-decayed", corner,
+            playerHeight * 1.35f, new Vector2(20f, 30f), new Vector2(0f, -1f));
+        wardrobeCollider = CreateBedroomFurniture(room, "Guarda-roupa", "wardrobe-decayed",
+            corner + new Vector2(-3f, 1f), playerHeight * 1.65f,
+            new Vector2(23f, 29f), new Vector2(-0.5f, -1.5f));
         visuals.Block(room, "Escrivaninha", new Vector2(bounds.xMax - 7, bounds.yMax - 5), new Vector2(7, 3), new Color(0.28f, 0.16f, 0.1f));
         visuals.Block(room, "Livro", new Vector2(bounds.xMax - 7, bounds.yMax - 5), new Vector2(1, 1.4f), new Color(0.48f, 0.18f, 0.2f), -49);
-        visuals.Block(room, "Guarda-roupa", new Vector2(bounds.xMax - 4, bounds.yMin + 8), new Vector2(3, 9), new Color(0.2f, 0.12f, 0.1f));
+        BuildCandelabras(room, bounds, corner);
+        BuildClock(room, bounds);
+    }
+
+    private void BuildClock(Transform room, Rect bounds)
+    {
+        Sprite sprite = Resources.Load<Sprite>("Art/DreadRoom/grandfather-clock");
+        if (sprite == null)
+        {
+            Debug.LogError("Missing Dread Rooms grandfather clock sprite.", this);
+            return;
+        }
+        SpriteRenderer clock = visuals.Block(room, "Relogio antigo",
+            new Vector2(bounds.xMin + 14f, bounds.yMax - 3.5f), Vector2.one, Color.white, -45);
+        clock.sprite = sprite;
+        clock.transform.localScale = Vector3.one * (2.6f / sprite.bounds.size.y);
+        clock.gameObject.AddComponent<HauntedClock>().Initialize(match);
+    }
+    private void BuildCandelabras(Transform room, Rect bounds, Vector2 bedPosition)
+    {
+        Sprite sprite = Resources.Load<Sprite>("Art/DreadRoom/candelabra");
+        if (sprite == null)
+        {
+            Debug.LogError("Missing Dread Rooms candelabra sprite.", this);
+            return;
+        }
+        Vector2[] positions = {
+            bedPosition + new Vector2(2.5f, 2.5f),
+            new Vector2(bounds.xMax - 4f, bounds.yMax - 4f),
+            new Vector2(bounds.xMin + 4f, bounds.center.y),
+            new Vector2(bounds.xMax - 4f, bounds.center.y),
+            new Vector2(bounds.xMin + 4f, bounds.yMin + 4f),
+            new Vector2(bounds.xMax - 4f, bounds.yMin + 4f)
+        };
+        foreach (Vector2 position in positions)
+        {
+            // Decorative fixtures near the edges leave combat paths unobstructed.
+            var fixture = new GameObject("Candelabro");
+            fixture.transform.SetParent(room, false);
+            fixture.transform.localPosition = position;
+            SpriteRenderer renderer = visuals.Block(fixture.transform, "Candelabro sprite",
+                Vector2.zero, Vector2.one * 0.75f, Color.white, -45);
+            renderer.sprite = sprite;
+            fixture.AddComponent<CandelabraLight>().Initialize(match);
+        }
+    }
+    private BoxCollider2D CreateBedroomFurniture(Transform room, string label, string asset,
+        Vector2 position, float height, Vector2 opaquePixelSize, Vector2 opaquePixelCenter)
+    {
+        Sprite sprite = Resources.Load<Sprite>("Art/DreadRoom/" + asset);
+        if (sprite == null)
+        {
+            Debug.LogError("Missing Dread Rooms furniture: " + asset, this);
+            return null;
+        }
+        SpriteRenderer renderer = visuals.Block(room, label, position, Vector2.one, Color.white);
+        renderer.sprite = sprite;
+        // Size and collision use the artwork, excluding the transparent 32x32 canvas padding.
+        float ppu = sprite.pixelsPerUnit;
+        renderer.transform.localScale = Vector3.one * (height * ppu / opaquePixelSize.y);
+        BoxCollider2D obstacle = renderer.gameObject.AddComponent<BoxCollider2D>();
+        obstacle.size = opaquePixelSize / ppu * 0.9f;
+        obstacle.offset = opaquePixelCenter / ppu;
+        Rigidbody2D body = renderer.gameObject.AddComponent<Rigidbody2D>();
+        body.bodyType = RigidbodyType2D.Static;
+        return obstacle;
     }
 }
 

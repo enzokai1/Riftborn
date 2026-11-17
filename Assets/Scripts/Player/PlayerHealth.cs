@@ -51,8 +51,16 @@ public class PlayerHealth : MonoBehaviour
         HealthChanged?.Invoke();
     }
 
+#if UNITY_EDITOR
+    // Runtime-only editor toggle; never serialized or included in player builds.
+    public bool EditorInvulnerable { get; set; }
+#endif
+
     public void TakeDamage(int amount)
     {
+#if UNITY_EDITOR
+        if (EditorInvulnerable) return;
+#endif
         if (amount <= 0 || CurrentHealth <= 0 || Invulnerable) return;
         CurrentHealth = Mathf.Max(0, CurrentHealth - amount);
         HealthChanged?.Invoke();

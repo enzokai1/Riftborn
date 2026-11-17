@@ -7,7 +7,11 @@ public class FirstStageHUD : MonoBehaviour
 {
     private MatchStats match;
     private GUIStyle title, body, caption, centered, number, button;
+    private Font interfaceFont;
     private Texture2D panelGradient;
+    private GUIStyle hudTimer, hudKills, hudLevel, hudHealth, hudObjective;
+    private Texture2D skullIcon;
+    private Sprite fragmentIcon;
     private enum FrameKind { Objective, Vital, Experience, Quiet, Boss, Ornate }
     private GUIStyle[] fantasyFrames;
     private Texture2D menuDivider, bossDivider;
@@ -38,7 +42,8 @@ public class FirstStageHUD : MonoBehaviour
         TextAnchor alignment = TextAnchor.UpperLeft)
     {
         var style = new GUIStyle(GUI.skin.label) {
-            fontSize = size, fontStyle = weight, wordWrap = true,
+            font = interfaceFont, fontSize = size,
+            fontStyle = interfaceFont != null ? FontStyle.Normal : weight, wordWrap = true,
             alignment = alignment, padding = new RectOffset()
         };
         style.normal.textColor = color;
@@ -48,6 +53,7 @@ public class FirstStageHUD : MonoBehaviour
     private void Styles()
     {
         if (title != null) return;
+        interfaceFont = Resources.Load<Font>("UI/Fonts/alagard-riftborn-pt");
         string[] frames = { "frame", "frame-014", "frame-001", "frame-015", "frame-023", "frame-002" };
         int[] corners = { 12, 10, 6, 2, 10, 12 };
         fantasyFrames = new GUIStyle[frames.Length];
@@ -65,6 +71,14 @@ public class FirstStageHUD : MonoBehaviour
         caption = TextStyle(14, new Color(0.93f, 0.90f, 1f), FontStyle.Bold);
         centered = TextStyle(18, Color.white, FontStyle.Bold, TextAnchor.MiddleCenter);
         number = TextStyle(22, new Color(1f, 0.88f, 0.61f), FontStyle.Bold, TextAnchor.MiddleRight);
+        Font hudFont = interfaceFont;
+        hudTimer = HudStyle(hudFont, 42, TextAnchor.MiddleCenter);
+        hudKills = HudStyle(hudFont, 34, TextAnchor.MiddleLeft);
+        hudLevel = HudStyle(hudFont, 28, TextAnchor.MiddleRight);
+        hudHealth = HudStyle(hudFont, 20, TextAnchor.MiddleCenter);
+        hudObjective = HudStyle(hudFont, 22, TextAnchor.MiddleLeft);
+        fragmentIcon = Resources.Load<Sprite>("Art/Fragments/Crystal00");
+        skullIcon = Resources.Load<Texture2D>("UI/Icons/KillSkull");
         // Native button control retains mouse/keyboard behavior; its surface is drawn below.
         button = new GUIStyle(GUIStyle.none) { stretchWidth = false, stretchHeight = false };
         panelGradient = new Texture2D(1, 32, TextureFormat.RGBA32, false) {
@@ -80,20 +94,38 @@ public class FirstStageHUD : MonoBehaviour
 
     private void Label(Rect rect, string text, GUIStyle style)
     {
+        if (Event.current.type != EventType.Repaint) return;
         // Rasterize glyphs at their final size instead of stretching the font atlas.
         // Snap both edges to screen pixels to avoid fractional text placement.
         Rect pixels = Rect.MinMaxRect(Mathf.Round(rect.xMin * uiScale), Mathf.Round(rect.yMin * uiScale),
             Mathf.Round(rect.xMax * uiScale), Mathf.Round(rect.yMax * uiScale));
         Matrix4x4 previous = GUI.matrix;
         int fontSize = style.fontSize;
+        Color faceColor = style.normal.textColor;
         try
         {
             GUI.matrix = Matrix4x4.identity;
             style.fontSize = Mathf.Max(1, Mathf.RoundToInt(fontSize * uiScale));
-            GUI.Label(pixels, text, style);
+            // Draw every layer on the same screen-pixel grid. Keep the outline thin
+            // so Alagard's small counters and decorative cuts remain readable.
+            float edge = Mathf.Max(1f, Mathf.Round(style.fontSize / 32f));
+            float depth = edge * 2f;
+            style.normal.textColor = new Color(0.015f, 0.02f, 0.025f, faceColor.a);
+            // Explicitly use the normal state for every layer. GUI.Label selects
+            // hover under the cursor, which otherwise turns the dark passes white.
+            var content = new GUIContent(text);
+            style.Draw(new Rect(pixels.x + depth, pixels.y + depth, pixels.width, pixels.height), content, false, false, false, false);
+            for (int y = -1; y <= 1; y++)
+            for (int x = -1; x <= 1; x++)
+                if (x != 0 || y != 0)
+                    style.Draw(new Rect(pixels.x + x * edge, pixels.y + y * edge,
+                        pixels.width, pixels.height), content, false, false, false, false);
+            style.normal.textColor = faceColor;
+            style.Draw(pixels, content, false, false, false, false);
         }
         finally
         {
+            style.normal.textColor = faceColor;
             style.fontSize = fontSize;
             GUI.matrix = previous;
         }
@@ -187,54 +219,73 @@ public class FirstStageHUD : MonoBehaviour
         return clicked;
     }
 
+    private GUIStyle HudStyle(Font font, int size, TextAnchor alignment)
+    {
+        GUIStyle style = TextStyle(size, Color.white, FontStyle.Normal, alignment);
+        style.font = font;
+        style.wordWrap = false;
+        style.clipping = TextClipping.Clip;
+        return style;
+    }
+
+    private void HudSprite(Rect rect, Sprite sprite)
+    {
+        if (sprite == null || Event.current.type != EventType.Repaint) return;
+        Rect source = sprite.textureRect;
+        Texture2D texture = sprite.texture;
+        GUI.DrawTextureWithTexCoords(rect, texture, new Rect(source.x / texture.width,
+            source.y / texture.height, source.width / texture.width, source.height / texture.height));
+    }
+    private void CompactBar(Rect rect, float progress, Color fill)
+    {
+        Rounded(rect, new Color(0.28f, 0.28f, 0.28f), 0);
+        Rounded(new Rect(rect.x + 2, rect.y + 2, rect.width - 4, rect.height - 4), new Color(0.015f, 0.015f, 0.02f), 0);
+        float width = (rect.width - 6) * Mathf.Clamp01(progress);
+        if (width > 0) Rounded(new Rect(rect.x + 3, rect.y + 3, width, rect.height - 6), fill, 0);
+    }
+
+    private void OutlinedLabel(Rect rect, string text, GUIStyle style)
+    {
+        // Label applies the same pixel outline and depth to HUD and menu text.
+        Label(rect, text, style);
+    }
     private void DrawStatus()
     {
-        Panel(new Rect(20, 20, 330, 148), Gold);
-        Diamond(new Vector2(44, 45), 9, Gold);
-        Label(new Rect(58, 38, 266, 20), "OBJETIVO  /  O QUARTO", caption);
-        Label(new Rect(38, 65, 294, 76), match.Objective.Instruction, body);
-        int count = match.Objective.RequiredFragments;
-        float step = Mathf.Min(24, 282f / Mathf.Max(1, count));
-        for (int i = 0; i < count; i++)
-            Diamond(new Vector2(44 + i * step, 152), 7,
-                i < match.Objective.CollectedFragments
-                    ? new Color(0.94f, 0.77f, 0.43f) : new Color(0.3f, 0.25f, 0.37f));
-
         PlayerExperience experience = match.Experience;
-        if (experience != null)
-        {
-            float x = (viewWidth - 380) / 2;
-            Panel(new Rect(x, 20, 380, 110), Violet, FrameKind.Experience);
-            Weapon weapon = experience.GetComponentInChildren<Weapon>();
-            int damage = weapon != null ? weapon.CurrentDamage : 10 + experience.DamageBonus;
-            Label(new Rect(x + 18, 34, 180, 28), $"Nível {experience.CurrentLevel}", title);
-            Label(new Rect(x + 220, 40, 142, 20), $"DANO  {damage}", caption);
-            Bar(new Rect(x + 20, 73, 340, 18),
-                experience.NextLevelExperience > 0 ? (float)experience.CurrentExperience / experience.NextLevelExperience : 0f, Violet, FrameKind.Experience);
-            Label(new Rect(x + 20, 101, 340, 18),
-                $"{experience.CurrentExperience} / {experience.NextLevelExperience} XP", caption);
-        }
+        float progress = experience != null && experience.NextLevelExperience > 0
+            ? (float)experience.CurrentExperience / experience.NextLevelExperience : 0f;
+        CompactBar(new Rect(0, 0, viewWidth, 22), progress, new Color(0f, 0.72f, 0.9f));
 
-        float right = viewWidth - 306;
-        Panel(new Rect(right, 20, 286, 108), Gold, FrameKind.Quiet);
-        Label(new Rect(right + 18, 38, 160, 18), "FASE 01", caption);
+        // The approved layout keeps all three counters free of background panels.
+        if (Event.current.type == EventType.Repaint && skullIcon != null)
+            GUI.DrawTexture(new Rect(14, 36, 34, 40), skullIcon, ScaleMode.ScaleToFit, true);
+        OutlinedLabel(new Rect(54, 32, viewWidth * 0.3f - 54, 48), match.GhostKills.ToString(), hudKills);
         int seconds = Mathf.FloorToInt(match.ElapsedSeconds);
-        Label(new Rect(right + 190, 30, 78, 30), $"{seconds / 60:00}:{seconds % 60:00}", number);
-        Label(new Rect(right + 18, 71, 250, 44),
-            match.BossDefeated ? "Gunter derrotado · Saída revelada"
-            : match.BossSpawned ? "Gunter despertou"
-            : $"Fantasmas derrotados: {match.GhostKills}", body);
+        OutlinedLabel(new Rect(viewWidth * 0.35f, 30, viewWidth * 0.3f, 52),
+            $"{seconds / 60:00}:{seconds % 60:00}", hudTimer);
+        // The level stays smaller and visually secondary to the central timer.
+        OutlinedLabel(new Rect(viewWidth - 300, 32, 280, 48),
+            $"NÍVEL {(experience != null ? experience.CurrentLevel : 1)}", hudLevel);
 
         PlayerHealth player = match.Player;
         if (player != null)
         {
-            float y = viewHeight - 104;
-            Panel(new Rect(20, y, 292, 84), Gold, FrameKind.Vital);
-            Label(new Rect(38, y + 15, 160, 20), "WINSTON  /  VIDA", caption);
-            Label(new Rect(188, y + 10, 106, 28), $"{player.CurrentHealth}/{player.MaxHealth}", number);
-            Bar(new Rect(40, y + 47, 252, 22),
-                player.MaxHealth > 0 ? (float)player.CurrentHealth / player.MaxHealth : 0f, Rose, FrameKind.Vital);
+            Rect health = new Rect(16, 90, 224, 30);
+            CompactBar(health, player.MaxHealth > 0 ? (float)player.CurrentHealth / player.MaxHealth : 0f,
+                new Color(0.76f, 0.035f, 0.12f));
+            OutlinedLabel(health, $"{player.CurrentHealth} / {player.MaxHealth}", hudHealth);
         }
+
+        bool fragments = !match.BossReady && !match.BossSpawned && !match.BossDefeated;
+        string objective = fragments
+            ? $"Fragmentos: {match.Objective.CollectedFragments} / {match.Objective.RequiredFragments}"
+            : match.Objective.Instruction;
+        float objectiveWidth = fragments ? 254f : 320f;
+        float objectiveHeight = fragments ? 42f : 64f;
+        Rounded(new Rect(16, 145, objectiveWidth, objectiveHeight), new Color(0, 0, 0, 0.78f), 0);
+        if (fragments) HudSprite(new Rect(24, 154, 16, 24), fragmentIcon);
+        OutlinedLabel(new Rect(fragments ? 49 : 28, 153, objectiveWidth - (fragments ? 42 : 24),
+            objectiveHeight - 12), objective, fragments ? hudObjective : body);
 
         if (match.Boss != null && !match.BossDefeated && !match.Finished)
         {

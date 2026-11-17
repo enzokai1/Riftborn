@@ -8,6 +8,7 @@ public class ExperiencePickup : MonoBehaviour
     [SerializeField, Min(0.1f)] private float collectionRadius = 1.5f;
     private bool collected;
     private bool attracted;
+    public bool IsAttracted => attracted;
     private PlayerExperience player;
     private PlayerHealth health;
     private MatchStats match;

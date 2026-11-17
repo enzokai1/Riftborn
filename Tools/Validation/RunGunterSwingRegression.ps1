@@ -11,7 +11,7 @@ Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'DemonAnimationRegression.cs') -
 foreach ($folder in @('Assets/TestArt','Assets/TestPrefabs')) {
     New-Item -ItemType Directory -Force -Path (Join-Path $validation $folder) | Out-Null
 }
-$art = Join-Path $project 'Assets/Art/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A'
+$art = Join-Path $project 'Assets/Art/ThirdParty/TinyRPG/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A'
 foreach ($action in @('Idle','Walk','Attack01','Attack02','Hurt','Death')) {
     foreach ($extension in @('.png','.png.meta')) {
         Copy-Item -LiteralPath (Join-Path $art ('Demon_A_' + $action + $extension)) -Destination (Join-Path $validation 'Assets/TestArt') -Force

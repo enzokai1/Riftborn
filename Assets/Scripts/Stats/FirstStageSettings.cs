@@ -20,6 +20,7 @@ public class FirstStageSettings : ISerializationCallbackReceiver
     [Min(1)] public int bossHealth = 20000;
     [SerializeField, HideInInspector] private int bossHealthVersion;
     [SerializeField, HideInInspector] private int bossAreaVersion;
+    [SerializeField, HideInInspector] private int bossDashVersion;
 
     public void OnBeforeSerialize() { }
 
@@ -37,14 +38,20 @@ public class FirstStageSettings : ISerializationCallbackReceiver
             if (bossAreaRadius == 3.5f) bossAreaRadius = 4f;
             bossAreaVersion = 1;
         }
+        if (bossDashVersion < 1)
+        {
+            if (bossDashRange == 7f) bossDashRange = 4f;
+            if (bossDashDuration == 0.6f) bossDashDuration = 0.3f;
+            bossDashVersion = 1;
+        }
     }
 
     [Min(1)] public int bossContactDamage = 30;
     [Min(1)] public int bossAreaDamage = 30;
     [Min(0.1f)] public float bossSpeed = 2.2f;
-    [Min(1f)] public float bossDashRange = 7f;
+    [Min(1f)] public float bossDashRange = 4f;
     [Min(1f)] public float bossDashSpeed = 12f;
-    [Min(0.1f)] public float bossDashDuration = 0.6f;
+    [Min(0.1f)] public float bossDashDuration = 0.3f;
     [Min(1f)] public float bossDashCooldown = 2.5f;
     [Tooltip("Distance of the committed forward step during Gunter's knife swing.")]
     [Min(0f)] public float bossSwingAdvance = 1f;
