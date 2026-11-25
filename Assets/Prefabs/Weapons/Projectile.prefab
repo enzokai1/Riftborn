@@ -84,7 +84,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21340000, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
+  m_Sprite: {fileID: 21340000, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -170,3 +170,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Projectile
   maximumLifetime: 3
+  flightFrames:
+  - {fileID: 21340000, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
+  - {fileID: 21340001, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
+  - {fileID: 21340002, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
+  - {fileID: 21340003, guid: c493ecad0d7344908f07390a323dbf31, type: 3}

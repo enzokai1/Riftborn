@@ -870,27 +870,28 @@ MonoBehaviour:
   - {fileID: 21330002, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
   - {fileID: 21330003, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
   - {fileID: 21330004, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
+  castingSpark: {fileID: 21340000, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
   framesPerSecond: 8
   walkDown:
-  - {fileID: 21310000, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
-  - {fileID: 21310001, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
-  - {fileID: 21310002, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
-  - {fileID: 21310003, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
+  - {fileID: 21310000, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
+  - {fileID: 21310001, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
+  - {fileID: 21310002, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
+  - {fileID: 21310003, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
   walkUp:
-  - {fileID: 21310004, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
-  - {fileID: 21310005, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
-  - {fileID: 21310006, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
-  - {fileID: 21310007, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
+  - {fileID: 21310004, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
+  - {fileID: 21310005, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
+  - {fileID: 21310006, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
+  - {fileID: 21310007, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
   walkLeft:
-  - {fileID: 21310008, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
-  - {fileID: 21310009, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
-  - {fileID: 21310010, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
-  - {fileID: 21310011, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
+  - {fileID: 21310008, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
+  - {fileID: 21310009, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
+  - {fileID: 21310010, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
+  - {fileID: 21310011, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
   walkRight:
-  - {fileID: 21310012, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
-  - {fileID: 21310013, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
-  - {fileID: 21310014, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
-  - {fileID: 21310015, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
+  - {fileID: 21310012, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
+  - {fileID: 21310013, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
+  - {fileID: 21310014, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
+  - {fileID: 21310015, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
   shotDuration: 0.24
   shootDown:
   - {fileID: 21320000, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
@@ -907,7 +908,7 @@ MonoBehaviour:
   shootRight:
   - {fileID: 21320006, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
   - {fileID: 21320009, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
-  - {fileID: 21310012, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
+  - {fileID: 21310012, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
 --- !u!50 &648273948
 Rigidbody2D:
   serializedVersion: 5
@@ -984,7 +985,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21310000, guid: b60be089ad062dd4ab89fe015ada5bd6, type: 3}
+  m_Sprite: {fileID: 21310000, guid: c493ecad0d7344908f07390a323dbf31, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
