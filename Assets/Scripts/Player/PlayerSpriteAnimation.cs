@@ -18,6 +18,10 @@ public class PlayerSpriteAnimation : MonoBehaviour
     [SerializeField] private Sprite[] deathFrames;
     [SerializeField] private Sprite deadSprite;
 
+    [SerializeField] private Sprite castingSpark;
+    private SpriteRenderer charge;
+    private Vector2 castDirection;
+
     private enum Facing { Down, Up, Left, Right }
     private PlayerController controller;
     private SpriteRenderer spriteRenderer;
@@ -42,6 +46,13 @@ public class PlayerSpriteAnimation : MonoBehaviour
         controller = GetComponent<PlayerController>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         weapon = GetComponentInChildren<Weapon>();
+        if (castingSpark != null)
+        {
+            charge = new GameObject("Casting spark").AddComponent<SpriteRenderer>();
+            charge.transform.SetParent(transform, false);
+            charge.sprite = castingSpark;
+            charge.enabled = false;
+        }
     }
 
     private void OnEnable()
@@ -52,6 +63,7 @@ public class PlayerSpriteAnimation : MonoBehaviour
     private void OnDisable()
     {
         if (weapon != null) weapon.ShotStarted -= OnShotStarted;
+        if (charge != null) charge.enabled = false;
         shooting = false;
         wasMoving = false;
         walkElapsed = 0f;
@@ -78,6 +90,7 @@ public class PlayerSpriteAnimation : MonoBehaviour
     private void OnShotStarted(Vector2 direction)
     {
         if (dying) return;
+        castDirection = direction;
         shotFacing = DirectionToFacing(direction);
         shotElapsed = 0f;
         currentShotDuration = AttackDuration;
@@ -86,6 +99,7 @@ public class PlayerSpriteAnimation : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (charge != null) charge.enabled = false;
         if (dying)
         {
             deathElapsed += Time.unscaledDeltaTime;
@@ -108,20 +122,41 @@ public class PlayerSpriteAnimation : MonoBehaviour
         if (!moving || !wasMoving) walkElapsed = 0f;
         if (moving)
         {
-            facing = DirectionToFacing(direction);
+            Vector2 lookDirection = weapon != null && weapon.HasAim
+                ? weapon.AimDirection : direction;
+            facing = DirectionToFacing(lookDirection);
+            bool horizontal = facing == Facing.Left || facing == Facing.Right;
+            float forwardMotion = horizontal ? direction.x : direction.y;
+            if (facing == Facing.Left || facing == Facing.Down) forwardMotion = -forwardMotion;
             Sprite[] walkFrames = Frames(facing, false);
             int frameCount = walkFrames != null ? walkFrames.Length : 0;
             if (frameCount > 0)
-                walkElapsed = (walkElapsed + Time.deltaTime)
-                    % (frameCount / Mathf.Max(1f, framesPerSecond));
+            {
+                float step = forwardMotion < 0f ? -Time.deltaTime : Time.deltaTime;
+                walkElapsed = Mathf.Repeat(walkElapsed + step, frameCount / Mathf.Max(1f, framesPerSecond));
+            }
         }
         wasMoving = moving;
 
         if (shooting && (weapon == null || !weapon.isActiveAndEnabled || !weapon.HasEnemyInRange))
             shooting = false;
-        // Casting changes the pose without interrupting movement.
-        // The walk cycle keeps advancing and resumes after the shot.
-        if (shooting)
+        // On the move, play the cast at the hand over the uninterrupted stride.
+        if (shooting && moving && charge != null)
+        {
+            float progress = shotElapsed / currentShotDuration;
+            if (progress < 1f / 3f)
+            {
+                charge.transform.position = CastOrigin(castDirection);
+                charge.transform.right = castDirection;
+                charge.transform.localScale = Vector3.one * Mathf.Lerp(0.2f, 0.55f, progress * 3f);
+                charge.sortingLayerID = spriteRenderer.sortingLayerID;
+                charge.sortingOrder = spriteRenderer.sortingOrder + 1;
+                charge.enabled = true;
+            }
+            shotElapsed += Time.deltaTime;
+            shooting = shotElapsed < currentShotDuration;
+        }
+        if (shooting && (!moving || charge == null))
         {
             Sprite[] shots = Frames(shotFacing, true);
             if (shotElapsed < currentShotDuration && shots != null && shots.Length > 0)
@@ -137,7 +172,7 @@ public class PlayerSpriteAnimation : MonoBehaviour
         }
 
         ShowFrame(Frames(facing, false),
-            moving ? Mathf.FloorToInt(walkElapsed * Mathf.Max(1f, framesPerSecond)) : 0);
+            moving ? Mathf.FloorToInt(walkElapsed * Mathf.Max(1f, framesPerSecond)) : (castingSpark != null ? 1 : 0));
     }
 
     private static Facing DirectionToFacing(Vector2 direction)

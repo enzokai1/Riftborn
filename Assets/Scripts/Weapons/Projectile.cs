@@ -7,6 +7,9 @@ public class Projectile : MonoBehaviour
     [Tooltip("Maximum lifetime in seconds, including shots that miss.")]
     [SerializeField, Min(0.01f)] private float maximumLifetime = 3f;
 
+    [SerializeField] private Sprite[] flightFrames;
+    private SpriteRenderer flightRenderer;
+    private float flightTime;
     private Rigidbody2D body;
     private int damage;
     private bool hasHit;
@@ -15,6 +18,7 @@ public class Projectile : MonoBehaviour
 
     private void Awake()
     {
+        flightRenderer = GetComponent<SpriteRenderer>();
         body = GetComponent<Rigidbody2D>();
         body.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         body.interpolation = RigidbodyInterpolation2D.Interpolate;
@@ -29,6 +33,13 @@ public class Projectile : MonoBehaviour
         launchPosition = body.position;
         maximumDistance = Mathf.Max(0.01f, range);
         body.linearVelocity = direction.normalized * Mathf.Max(0f, speed);
+    }
+
+    private void Update()
+    {
+        if (flightRenderer == null || flightFrames == null || flightFrames.Length == 0) return;
+        flightTime += Time.deltaTime;
+        flightRenderer.sprite = flightFrames[Mathf.FloorToInt(flightTime * 16f) % flightFrames.Length];
     }
 
     private void FixedUpdate()
